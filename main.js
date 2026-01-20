@@ -44,6 +44,8 @@ function loadLevel(levelName) {
 		return;
 	}
 
+	gameEngine.addEntity(new Background(gameEngine));
+
 	// Create enemy ships (already parked)
 	levelConfig.enemies.forEach(enemyData => {
 		const enemy = new EnemyShip(gameEngine, enemyData.x, enemyData.y, enemyData.angle);
