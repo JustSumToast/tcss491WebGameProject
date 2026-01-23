@@ -1,8 +1,7 @@
-class PlayerShip {
+class PlayerShip extends Entity {
   constructor(game, x, y) {
-    this.game = game;
-    this.x = x;
-    this.y = y;
+    super(game, x, y, 40, 20); // Call Entity constructor with width=40, height=20
+
     this.angle = 0; // rotation in radians
     this.vx = 0; // velocity x
     this.vy = 0; // velocity y
@@ -11,11 +10,8 @@ class PlayerShip {
     this.acceleration = 300; // acceleration rate
     this.deceleration = 200; // deceleration rate
     this.turnSpeed = 3; // radians per second
-
-    // Bounding box dimensions
-    this.width = 40;
-    this.height = 20;
-    let prevDir;
+    this.HP = 1; // set health point = 1 for now will increase in future
+    this.prevDir = null;
   }
 
   update() {
@@ -112,6 +108,29 @@ class PlayerShip {
       Math.min(this.game.ctx.canvas.height - this.height / 2, this.y),
     );
 
+    // Update bounding circle after position changes
+    this.updateBoundingCircle();
+
+    // Check collisions with other entities
+    for (let entity of this.game.entities) {
+      // Skip self and entities without bounding circles
+      if (entity === this || !entity.boundingCircle) continue;
+
+      if (this.boundingCircle.collide(entity.boundingCircle)) {
+        // Collision detected! Handle it here
+        if (entity instanceof EnemyShip) {
+          this.HP -= 1;
+          console.log("Collision with enemy! HP:", this.HP);
+
+          // Check if player is dead
+          if (this.HP <= 0) {
+            resetLevel();
+            return; // Stop update since level is resetting
+          }
+        }
+      }
+    }
+
     // Debug output
     if (this.game.options.debugging) {
       console.log(
@@ -142,6 +161,9 @@ class PlayerShip {
     ctx.fill();
 
     ctx.restore();
+
+    // Draw bounding circle (shows actual collision area)
+    this.boundingCircle.draw(ctx);
 
     // Optional: Draw velocity vector for debugging
     if (this.game.options.debugging) {

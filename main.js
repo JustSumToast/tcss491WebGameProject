@@ -7,7 +7,7 @@ const ASSET_MANAGER = new AssetManager();
 // Level configurations
 const VERTICAL_ANGLE = Math.PI / 2;
 const SLOT_WIDTH = 20;  // Width of vertical parking slot
-const BUFFER_SPACE = 15;  // Buffer space between slots to prevent collision
+const BUFFER_SPACE = 50;  // Buffer space between slots (must be > player diameter of 40)
 
 // Spacing calculations
 const GAP_1X = SLOT_WIDTH + BUFFER_SPACE + SLOT_WIDTH;
@@ -44,6 +44,9 @@ function loadLevel(levelName) {
 		return;
 	}
 
+	// Store current level name for reset
+	gameEngine.currentLevel = levelName;
+
 	gameEngine.addEntity(new Background(gameEngine));
 
 	// Create enemy ships (already parked)
@@ -51,6 +54,21 @@ function loadLevel(levelName) {
 		const enemy = new EnemyShip(gameEngine, enemyData.x, enemyData.y, enemyData.angle);
 		gameEngine.addEntity(enemy);
 	});
+}
+
+function resetLevel() {
+	// Clear all entities
+	gameEngine.entities = [];
+
+	// Re-create player at starting position
+	const canvas = gameEngine.ctx.canvas;
+	const player = new PlayerShip(gameEngine, canvas.width / 2, canvas.height / 2);
+	gameEngine.addEntity(player);
+
+	// Reload the current level
+	loadLevel(gameEngine.currentLevel);
+
+	console.log("Level reset!");
 }
 
 ASSET_MANAGER.downloadAll(() => {

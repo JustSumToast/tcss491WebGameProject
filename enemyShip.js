@@ -1,12 +1,8 @@
-class EnemyShip {
+class EnemyShip extends Entity {
     constructor(game, x, y, angle = 0, image = null, spriteX = 0, spriteY = 0, spriteWidth = null, spriteHeight = null) {
-        this.game = game;
-        this.x = x;
-        this.y = y;
+        super(game, x, y, 40, 20); // Call Entity constructor with width=40, height=20
+
         this.angle = angle; // rotation in radians
-        this.width = 40;
-        this.height = 20;
-        this.removeFromWorld = false;
 
         // Image and sprite support
         this.image = image;
@@ -18,6 +14,8 @@ class EnemyShip {
 
     update() {
         // Static enemy - no movement
+        // Update bounding circle (needed if enemy moves in the future)
+        this.updateBoundingCircle();
     }
 
     draw(ctx) {
@@ -54,5 +52,8 @@ class EnemyShip {
         }
 
         ctx.restore();
+
+        // Draw bounding circle (shows actual collision area)
+        this.boundingCircle.draw(ctx);
     }
 }
