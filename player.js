@@ -64,7 +64,7 @@ class PlayerShip extends Entity {
             if (this.boundingCircle.collide(entity.boundingCircle)) {
                 if (entity instanceof EnemyShip) {
                     this.HP -= 1;
-                    console.log("Collision with enemy! HP:", this.HP);
+                    console.log("You collided with an enemy! HP:", this.HP);
                     if (this.HP <= 0) {
                         this.game.gameState = "lost";
                         this.game.message = "YOU LOSE!";
@@ -73,7 +73,7 @@ class PlayerShip extends Entity {
                         return;
                     }
                 }
-            } 
+            }
         }
     }
 
@@ -108,7 +108,7 @@ class PlayerShip extends Entity {
             ctx.font = "48px Arial";
             ctx.textAlign = "center";
             ctx.fillText(this.game.message, ctx.canvas.width / 2, ctx.canvas.height / 2);
-            ctx.restore();
+            ctx.restore();a
         }
 
         // Optional velocity vector

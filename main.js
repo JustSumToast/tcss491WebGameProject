@@ -26,6 +26,10 @@ const LEVELS = {
 			{ x: 100 + GAP_3X + GAP_2X, y: 400, angle: VERTICAL_ANGLE },
 			{ x: 100 + GAP_3X + GAP_2X + GAP_1X, y: 400, angle: VERTICAL_ANGLE },
 			{ x: 100 + GAP_3X + GAP_2X + GAP_1X + GAP_3X, y: 400, angle: VERTICAL_ANGLE }
+		],
+		walls: [
+			{ x: 300, y: 90, width: 500, height: 30},
+			{ x: 400, y: 450, width: 700, height: 30}
 		]
 	}
 };
@@ -33,6 +37,7 @@ const LEVELS = {
 // Load level enemies
 function loadLevel(levelName) {
 	const levelConfig = LEVELS[levelName];
+	const canvas = gameEngine.ctx.canvas;
 	if (!levelConfig) {
 		console.error(`Level ${levelName} not found`);
 		return;
@@ -45,7 +50,16 @@ function loadLevel(levelName) {
 		const enemy = new EnemyShip(gameEngine, enemyData.x, enemyData.y, enemyData.angle);
 		gameEngine.addEntity(enemy);
 	});
+
+	if (levelConfig.walls) {
+		levelConfig.walls.forEach( w => {
+			const x = w.x === "center" ? canvas.width / 2: w.x;
+			const width = w.width === "full" ? canvas.width : w.width;
+			gameEngine.addEntity( new Wall(gameEngine, x, w.y, width, w.height));
+		});
+	}
 }
+
 
 // Reset level
 function resetLevel(game) {
@@ -74,6 +88,8 @@ ASSET_MANAGER.downloadAll(() => {
 
 	gameEngine.init(ctx);
 
+	const thickness = 20;
+
 	// Player
 	const player = new PlayerShip(gameEngine, canvas.width / 2, canvas.height / 2);
 	gameEngine.addEntity(player);
@@ -84,6 +100,10 @@ ASSET_MANAGER.downloadAll(() => {
 
 	// Load enemies
 	loadLevel('level1');
+
+	
+
+
 
 	gameEngine.start();
 });
