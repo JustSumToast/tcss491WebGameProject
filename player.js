@@ -74,6 +74,22 @@ class PlayerShip extends Entity {
                     }
                 }
             }
+
+            if (entity.boundingRect) {
+                if (this.circleRectCollide(this.boundingCircle, entity.boundingRect)) {
+                    if (entity instanceof Wall) {
+                    this.HP -= 1;
+                    console.log("You collided with an enemy! HP:", this.HP);
+                    if (this.HP <= 0) {
+                        this.game.gameState = "lost";
+                        this.game.message = "YOU LOSE!";
+                        this.speed = 0;
+                        setTimeout(() => resetLevel(this.game), 2000);
+                        return;
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -108,7 +124,7 @@ class PlayerShip extends Entity {
             ctx.font = "48px Arial";
             ctx.textAlign = "center";
             ctx.fillText(this.game.message, ctx.canvas.width / 2, ctx.canvas.height / 2);
-            ctx.restore();a
+            ctx.restore();
         }
 
         // Optional velocity vector
@@ -120,5 +136,28 @@ class PlayerShip extends Entity {
             ctx.lineTo(this.x + this.vx * 0.1, this.y + this.vy * 0.1);
             ctx.stroke();
         }
+    }
+
+    //helper function to help collide with walls
+    circleRectCollide(circle, rect) {
+        const halfW = rect.width / 2;
+        const halfH = rect.height / 2;
+
+        const left   = rect.x - halfW;
+        const right  = rect.x + halfW;
+        const top    = rect.y - halfH;
+        const bottom = rect.y + halfH;
+
+        const cx = circle.x;
+        const cy = circle.y;
+        const r  = circle.radius;
+
+        const closestX = Math.max(left, Math.min(cx, right));
+        const closestY = Math.max(top,  Math.min(cy, bottom));
+
+        const dx = cx - closestX;
+        const dy = cy - closestY;
+
+        return (dx * dx + dy * dy) <= (r * r);
     }
 }
