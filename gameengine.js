@@ -88,6 +88,25 @@ class GameEngine {
         for (let i = this.entities.length - 1; i >= 0; i--) {
             this.entities[i].draw(this.ctx, this);
         }
+
+        // Draw UI text at bottom
+        this.drawUI();
+    };
+
+    drawUI() {
+        const ctx = this.ctx;
+        const canvas = ctx.canvas;
+
+        ctx.save();
+        ctx.font = "16px Arial";
+
+        ctx.fillStyle = "lime";
+        ctx.fillText("Goal: Park your ship inside the green circle without hitting enemies or walls.", 10, canvas.height - 35);
+
+        ctx.fillStyle = "yellow";
+        ctx.fillText("Controls: W/S - Accelerate/Reverse | A/D - Turn Left/Right", 10, canvas.height - 15);
+
+        ctx.restore();
     };
 
     update() {
