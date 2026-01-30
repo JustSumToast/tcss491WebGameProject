@@ -1,6 +1,9 @@
 const gameEngine = new GameEngine({ debugging: true });
 const ASSET_MANAGER = new AssetManager();
 
+// Load assets
+ASSET_MANAGER.queueDownload("./images/playership.png");
+
 // Track game state
 gameEngine.gameState = "playing"; // "playing", "won", "lost"
 gameEngine.message = "";          // Text to display

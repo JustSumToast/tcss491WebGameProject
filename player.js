@@ -13,6 +13,16 @@ class PlayerShip extends Entity {
         this.HP = 1;
         this.prevDir = null;
 
+        // Sprite setup
+        this.setupSprite({
+            path: "./images/playership.png",
+            frameWidth: 969,
+            frameHeight: 422,
+            frameCount: 2,
+            scale: 0.07
+        });
+        this.isMoving = false;
+
         this.updateBoundingCircle();
     }
 
@@ -40,6 +50,9 @@ class PlayerShip extends Entity {
             if (this.speed > 0) this.speed = Math.max(0, this.speed - this.deceleration * dt);
             else if (this.speed < 0) this.speed = Math.min(0, this.speed + this.deceleration * dt);
         }
+
+        // Track if ship is moving for animation
+        this.isMoving = Math.abs(this.speed) > 5;
 
         // Turning
         this.angle += turn * this.turnSpeed * dt;
@@ -94,11 +107,13 @@ class PlayerShip extends Entity {
     }
 
     draw(ctx) {
+        // Draw sprite: frame 0 = idle, frame 1 = moving
+        this.drawSprite(ctx, this.x, this.y, this.angle, this.isMoving ? 1 : 0);
+
+        // Rectangle (debug)
         ctx.save();
         ctx.translate(this.x, this.y);
         ctx.rotate(this.angle);
-
-        // Rectangle
         ctx.strokeStyle = "red";
         ctx.lineWidth = 2;
         ctx.strokeRect(-this.width / 2, -this.height / 2, this.width, this.height);
@@ -111,7 +126,6 @@ class PlayerShip extends Entity {
         ctx.lineTo(this.width / 2 - 10, 5);
         ctx.closePath();
         ctx.fill();
-
         ctx.restore();
 
         // Draw bounding circle

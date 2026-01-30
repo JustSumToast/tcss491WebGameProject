@@ -30,4 +30,34 @@ class Entity {
     draw(ctx) {
         // Override in child classes
     }
+
+    // Set up sprite for this entity
+    setupSprite(config) {
+        this.spriteSheet = ASSET_MANAGER.getAsset(config.path);
+        this.frameWidth = config.frameWidth;
+        this.frameHeight = config.frameHeight;
+        this.frameCount = config.frameCount || 1;
+        this.spriteScale = config.scale || 1;
+    }
+
+    // Draw a specific frame of the sprite
+    drawSprite(ctx, x, y, angle, frameIndex) {
+        if (!this.spriteSheet) return;
+
+        const drawWidth = this.frameWidth * this.spriteScale;
+        const drawHeight = this.frameHeight * this.spriteScale;
+        const frameX = frameIndex * this.frameWidth;
+
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate(angle);
+        ctx.drawImage(
+            this.spriteSheet,
+            frameX, 0,
+            this.frameWidth, this.frameHeight,
+            -drawWidth / 2, -drawHeight / 2,
+            drawWidth, drawHeight
+        );
+        ctx.restore();
+    }
 }
