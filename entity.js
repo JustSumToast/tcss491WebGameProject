@@ -19,8 +19,8 @@ class Entity {
     }
 
     updateBoundingCircle() {
-        // Create bounding circle centered on entity position
-        this.boundingCircle = new BoundingCircle(this.x, this.y, this.radius);
+        // Pass game reference to bounding circle for debug toggle
+        this.boundingCircle = new BoundingCircle(this.x, this.y, this.radius, this.game);
     }
 
     update() {

@@ -1,5 +1,4 @@
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -17,8 +16,62 @@
     <script type="text/javascript" src="./goal.js"></script>
     <script type="text/javascript" src="./wall.js"></script>
     <script type="text/javascript" src="./main.js"></script>
+
+    <style>
+        
+        #gameMenu {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.85);
+            color: white;
+            padding: 25px 40px;
+            border-radius: 12px;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            z-index: 10;
+        }
+
+        #gameMenu h3 {
+            margin: 0 0 20px 0;
+            font-size: 24px;
+        }
+
+        #gameMenu button {
+            display: block;
+            margin: 10px auto;
+            padding: 12px 25px;
+            font-size: 18px;
+            cursor: pointer;
+            border: none;
+            border-radius: 6px;
+            background-color: #1E90FF;
+            color: white;
+            transition: background-color 0.2s;
+        }
+
+        #gameMenu button:hover {
+            background-color: #63B8FF;
+        }
+
+        canvas {
+            display: block;
+            margin: 0 auto;
+            background: black;
+            border: 1px solid black;
+        }
+    </style>
 </head>
 <body>
-    <canvas id="gameWorld" width="1024" height="768" style="background: black; border: 1px solid black" tabindex="0" autofocus></canvas>
+    <!-- Actual Game Menu -->
+    <div id="gameMenu">
+        <h3>Space Parking Simulator</h3>
+        <button onclick="startLevel('level1')">Level 1</button>
+        <button onclick="startLevel('level2')">Level 2</button>
+    </div>
+
+    <!-- Canvas -->
+    <canvas id="gameWorld" width="1024" height="768" tabindex="0" autofocus></canvas>
 </body>
 </html>

@@ -110,14 +110,6 @@ class PlayerShip extends Entity {
         // Draw sprite: frame 0 = idle, frame 1 = moving
         this.drawSprite(ctx, this.x, this.y, this.angle, this.isMoving ? 1 : 0);
 
-        // Rectangle (debug)
-        ctx.save();
-        ctx.translate(this.x, this.y);
-        ctx.rotate(this.angle);
-        ctx.strokeStyle = "red";
-        ctx.lineWidth = 2;
-        ctx.strokeRect(-this.width / 2, -this.height / 2, this.width, this.height);
-
         // Direction triangle
         ctx.fillStyle = "blue";
         ctx.beginPath();
