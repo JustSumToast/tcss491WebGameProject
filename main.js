@@ -7,6 +7,7 @@ ASSET_MANAGER.queueDownload("./images/playership.png");
 // Track game state
 gameEngine.gameState = "menu"; // "menu", "playing", "won", "lost"
 gameEngine.message = "";
+gameEngine.elapsedTime = 0;
 
 // Level configurations
 const VERTICAL_ANGLE = Math.PI / 2;
@@ -82,9 +83,10 @@ function loadLevel(levelName) {
 
 // Reset level
 function resetLevel(game) {
-    game.entities = [];
+    game.entities = game.entities.filter(e => e instanceof UI);
     game.gameState = "playing";
     game.message = "";
+    game.elapsedTime = 0;
 
     const canvas = game.ctx.canvas;
     const levelConfig = LEVELS[game.currentLevel];

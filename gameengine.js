@@ -99,17 +99,34 @@ class GameEngine {
 
         ctx.save();
         ctx.font = "16px Arial";
+        ctx.textBaseline = "top";
 
         ctx.fillStyle = "lime";
+        ctx.textAlign = "left";
         ctx.fillText("Goal: Park your ship inside the blue circle without hitting enemies or walls.", 10, 20);
 
         ctx.fillStyle = "yellow";
         ctx.fillText("Controls: W/S - Accelerate/Reverse | A/D - Turn Left/Right", 10, 40);
 
+        //timer
+        ctx.fillStyle = "white";
+        ctx.font = "20px Arial";
+        ctx.textAlign = "right";
+        ctx.textBaseline = "top";
+        ctx.fillText(
+            `Time: ${this.elapsedTime.toFixed(1)}s`,
+            canvas.width - 20,
+            20
+        );
+
         ctx.restore();
     };
 
     update() {
+        if (this.gameState === "playing") {
+            this.elapsedTime += this.clockTick;
+        }
+
         let entitiesCount = this.entities.length;
 
         for (let i = 0; i < entitiesCount; i++) {
