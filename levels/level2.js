@@ -1,4 +1,4 @@
-// Level 2 - Scattered Obstacles
+// Level 2 - Neptune's Scattered Obstacles
 const LEVEL_2_VERTICAL_ANGLE = Math.PI / 2;
 
 const LEVEL_2 = {

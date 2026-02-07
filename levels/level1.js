@@ -1,7 +1,7 @@
-// Level 1 - Parking Lot
-const VERTICAL_ANGLE = Math.PI / 2;
-const SLOT_WIDTH = 20;
-const BUFFER_SPACE = 50;
+// Level 1 - Pluto's Parking Lot
+const VERTICAL_ANGLE = Math.PI;
+const SLOT_WIDTH = 25;
+const BUFFER_SPACE = 55;
 
 const GAP_1X = SLOT_WIDTH + BUFFER_SPACE + SLOT_WIDTH;
 const GAP_2X = SLOT_WIDTH + (BUFFER_SPACE + SLOT_WIDTH * 2);
@@ -10,24 +10,49 @@ const GAP_3X = SLOT_WIDTH + (BUFFER_SPACE + SLOT_WIDTH * 3);
 const LEVEL_1 = {
     name: 'level1',
     enemies: [
-        // Top row
-        { x: 100, y: 150, angle: VERTICAL_ANGLE },
-        { x: 100 + GAP_1X, y: 150, angle: VERTICAL_ANGLE },
-        { x: 100 + GAP_1X + GAP_2X, y: 150, angle: VERTICAL_ANGLE },
-        { x: 100 + GAP_1X + GAP_2X + GAP_1X, y: 150, angle: VERTICAL_ANGLE },
-        // Bottom row
-        { x: 100, y: 400, angle: VERTICAL_ANGLE },
-        { x: 100 + GAP_3X, y: 400, angle: VERTICAL_ANGLE },
-        { x: 100 + GAP_3X + GAP_2X, y: 400, angle: VERTICAL_ANGLE },
-        { x: 100 + GAP_3X + GAP_2X + GAP_1X, y: 400, angle: VERTICAL_ANGLE },
-        { x: 100 + GAP_3X + GAP_2X + GAP_1X + GAP_3X, y: 400, angle: VERTICAL_ANGLE }
+        // top row
+        { x: 200, y: 150, angle: VERTICAL_ANGLE}, 
+        { x: 200 + GAP_1X, y: 150, angle: VERTICAL_ANGLE},
+        { x: 200 + GAP_1X * 2, y: 150, angle: VERTICAL_ANGLE},
+        { x: 200 + GAP_1X * 3, y: 150, angle: VERTICAL_ANGLE},
+        { x: 200 + GAP_1X * 4, y: 150, angle: VERTICAL_ANGLE},
+        { x: 200 + GAP_1X * 5, y: 150, angle: VERTICAL_ANGLE},
+        { x: 200 + GAP_1X * 6, y: 150, angle: VERTICAL_ANGLE},
+
+        // middle row
+        { x: 200, y: 300, angle: VERTICAL_ANGLE}, 
+        { x: 200 + GAP_1X, y: 300, angle: VERTICAL_ANGLE},
+        { x: 200 + GAP_1X * 2, y: 300, angle: VERTICAL_ANGLE},
+        { x: 200 + GAP_1X * 3, y: 300, angle: VERTICAL_ANGLE},
+        { x: 200 + GAP_1X * 4, y: 300, angle: VERTICAL_ANGLE},
+        { x: 200 + GAP_1X * 5, y: 300, angle: VERTICAL_ANGLE},
+        { x: 200 + GAP_1X * 6, y: 300, angle: VERTICAL_ANGLE},
+
+        // bottom row
+        { x: 200, y: 450, angle: VERTICAL_ANGLE}, 
+        { x: 200 + GAP_1X, y: 450, angle: VERTICAL_ANGLE},
+        { x: 200 + GAP_1X * 2, y: 450, angle: VERTICAL_ANGLE},
+        { x: 200 + GAP_1X * 3, y: 450, angle: VERTICAL_ANGLE},
+        { x: 200 + GAP_1X * 4, y: 450, angle: VERTICAL_ANGLE},
+        { x: 200 + GAP_1X * 6, y: 450, angle: VERTICAL_ANGLE}
+
     ],
     walls: [
-        { x: 300, y: 90, width: 500, height: 30 },
-        { x: 400, y: 450, width: 700, height: 30 }
+        // level borders
+        { x: 500, y: 750, width: 1050, height: 55},
+        { x: 500, y: 25, width: 1050, height: 55},  
+        { x: 0, y: 500, width: 100, height: 1000},  
+        { x: 1025, y: 500, width: 100, height: 1000},  
+
+        { x: 500, y: 750, width: 1050, height: 55}, // this + three down = level borders...
+        { x: 500, y: 25, width: 1050, height: 55},  
+        { x: 0, y: 500, width: 100, height: 1000},  
+        { x: 1025, y: 500, width: 100, height: 1000}
+
     ],
-    goal: { x: 500, y: 300, radius: 30 },
-    playerStart: { x: 255, y: 650 }
+    goal: { x: 725, y: 450, radius: 25},
+
+    playerStart: { x: 500, y: 650 }
 };
 
 // Register to global LEVELS object
