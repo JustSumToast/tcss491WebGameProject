@@ -15,6 +15,11 @@ class GameEngine {
         this.wheel = null;
         this.keys = {};
 
+        // Information for timer
+        this.clockTick = 0;
+        this.timer = new Timer();
+        this.elapsedTime = 0;
+
         // Options and the Details
         this.options = options || {
             debugging: false,
@@ -113,8 +118,9 @@ class GameEngine {
         ctx.font = "20px Arial";
         ctx.textAlign = "right";
         ctx.textBaseline = "top";
+        const seconds = Math.floor(this.elapsedTime);
         ctx.fillText(
-            `Time: ${this.elapsedTime.toFixed(1)}s`,
+            `Time: ${seconds}s`,
             canvas.width - 20,
             20
         );

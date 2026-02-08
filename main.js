@@ -83,7 +83,7 @@ function loadLevel(levelName) {
 
 // Reset level
 function resetLevel(game) {
-    game.entities = game.entities.filter(e => e instanceof UI);
+    game.entities = [];
     game.gameState = "playing";
     game.message = "";
     game.elapsedTime = 0;
