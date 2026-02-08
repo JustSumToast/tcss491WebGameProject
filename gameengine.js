@@ -98,7 +98,7 @@ class GameEngine {
         const canvas = ctx.canvas;
 
         ctx.save();
-        ctx.font = "16px Arial";
+        ctx.font = "16px TimesNewRoman";
 
         ctx.fillStyle = "lime";
         ctx.fillText("Goal: Park your ship inside the blue circle without hitting enemies or walls.", 10, 20);

@@ -144,7 +144,7 @@ class PlayerShip extends Entity {
         }
     }
 
-    //helper function to help collide with walls
+    // helper function to help collide with walls
     circleRectCollide(circle, rect) {
         const halfW = rect.width / 2;
         const halfH = rect.height / 2;
