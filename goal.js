@@ -3,7 +3,7 @@ class GoalCircle extends Entity {
     super(game, x, y, radius * 2, radius * 2);
     this.radius = radius;
     this.holdTime = 0;
-    this.winThreshold = 3000; // milliseconds required to hold [5s]
+    this.winThreshold = 2000; // milliseconds required to hold [5s]
     this.updateBoundingCircle();
   }
 
@@ -42,7 +42,25 @@ class GoalCircle extends Entity {
     ctx.lineWidth = 3;
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+
     ctx.stroke();
+    if (this.holdTime > 0) {
+      const progress = Math.min(this.holdTime / this.winThreshold, 1);
+      const radGoalStart = this.radius * 2.5;
+      const radGoalEnd =
+        this.radius + (radGoalStart - this.radius) * (1 - progress);
+      ctx.beginPath();
+      ctx.arc(
+        this.x,
+        this.y,
+        Math.min(radGoalStart, radGoalEnd),
+        0,
+        Math.PI * 2,
+      );
+      ctx.strokeStyle = "yellow";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    }
     ctx.restore();
   }
 }
