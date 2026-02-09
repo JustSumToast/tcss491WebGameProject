@@ -32,7 +32,7 @@ class GoalCircle extends Entity {
       this.game.gameState = "won";
       this.game.message = "YOU WIN!";
       entity.speed = 0;
-      setTimeout(() => resetLevel(this.game), 2000);
+      setTimeout(() => nextLevel(this.game), 2000);
     }
   }
 
