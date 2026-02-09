@@ -5,6 +5,7 @@ class GoalCircle extends Entity {
     this.holdTime = 0;
     this.winThreshold = 2000; // milliseconds required to hold [5s]
     this.updateBoundingCircle();
+    this.meterRadius = 2.5;
   }
 
   updateBoundingCircle() {
@@ -46,7 +47,7 @@ class GoalCircle extends Entity {
     ctx.stroke();
     if (this.holdTime > 0) {
       const progress = Math.min(this.holdTime / this.winThreshold, 1);
-      const radGoalStart = this.radius * 2.5;
+      const radGoalStart = this.radius * this.meterRadius;
       const radGoalEnd =
         this.radius + (radGoalStart - this.radius) * (1 - progress);
       ctx.beginPath();
