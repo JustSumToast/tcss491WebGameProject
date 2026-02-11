@@ -7,6 +7,7 @@ const ASSET_MANAGER = new AssetManager();
 
 // load assets
 ASSET_MANAGER.queueDownload("./images/playership.png");
+ASSET_MANAGER.queueDownload("./images/blackhole.png");
 
 // track game state
 gameEngine.gameState = "menu"; // "menu", "playing", "won", "lost"
@@ -37,6 +38,11 @@ function loadLevel(levelName) {
     if (levelConfig.goal) {
         const g = levelConfig.goal;
         gameEngine.addEntity(new GoalCircle(gameEngine, g.x, g.y, g.radius));
+    }
+
+    // call level-specific onLoad if defined
+    if (levelConfig.onLoad) {
+        levelConfig.onLoad(gameEngine);
     }
 }
 
