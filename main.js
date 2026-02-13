@@ -12,6 +12,7 @@ ASSET_MANAGER.queueDownload("./images/blackhole.png");
 // track game state
 gameEngine.gameState = "menu"; // "menu", "playing", "won", "lost"
 gameEngine.message = "";
+gameEngine.elapsedTime = 0;
 
 // load level enemies, walls, goal
 function loadLevel(levelName) {
@@ -51,6 +52,7 @@ function resetLevel(game) {
     game.entities = [];
     game.gameState = "playing";
     game.message = "";
+    game.elapsedTime = 0;
 
     const canvas = game.ctx.canvas;
     const levelConfig = LEVELS[game.currentLevel];
