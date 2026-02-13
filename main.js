@@ -1,59 +1,20 @@
+// LEVELS object is populated by individual level files (levels/level1.js, levels/level2.js, etc.)
+// Each level file registers itself to the global LEVELS object
+if (typeof LEVELS === 'undefined') window.LEVELS = {};
+
 const gameEngine = new GameEngine({ debugging: false });
 const ASSET_MANAGER = new AssetManager();
 
-// Load assets
+// load assets
 ASSET_MANAGER.queueDownload("./images/playership.png");
+ASSET_MANAGER.queueDownload("./images/blackhole.png");
 
-// Track game state
+// track game state
 gameEngine.gameState = "menu"; // "menu", "playing", "won", "lost"
 gameEngine.message = "";
 gameEngine.elapsedTime = 0;
 
-// Level configurations
-const VERTICAL_ANGLE = Math.PI / 2;
-const SLOT_WIDTH = 20;
-const BUFFER_SPACE = 50;
-
-const GAP_1X = SLOT_WIDTH + BUFFER_SPACE + SLOT_WIDTH;
-const GAP_2X = SLOT_WIDTH + (BUFFER_SPACE + SLOT_WIDTH * 2);
-const GAP_3X = SLOT_WIDTH + (BUFFER_SPACE + SLOT_WIDTH * 3);
-
-const LEVELS = {
-    level1: {
-        enemies: [
-            { x: 100, y: 150, angle: VERTICAL_ANGLE },
-            { x: 100 + GAP_1X, y: 150, angle: VERTICAL_ANGLE },
-            { x: 100 + GAP_1X + GAP_2X, y: 150, angle: VERTICAL_ANGLE },
-            { x: 100 + GAP_1X + GAP_2X + GAP_1X, y: 150, angle: VERTICAL_ANGLE },
-            { x: 100, y: 400, angle: VERTICAL_ANGLE },
-            { x: 100 + GAP_3X, y: 400, angle: VERTICAL_ANGLE },
-            { x: 100 + GAP_3X + GAP_2X, y: 400, angle: VERTICAL_ANGLE },
-            { x: 100 + GAP_3X + GAP_2X + GAP_1X, y: 400, angle: VERTICAL_ANGLE },
-            { x: 100 + GAP_3X + GAP_2X + GAP_1X + GAP_3X, y: 400, angle: VERTICAL_ANGLE }
-        ],
-        walls: [
-            { x: 300, y: 90, width: 500, height: 30 },
-            { x: 400, y: 450, width: 700, height: 30 }
-        ],
-        goal: { x: 500, y: 300, radius: 30 },
-        playerStart: { x: 255, y: 650 } // 
-    },
-    level2: {
-        enemies: [
-            { x: 150, y: 100, angle: VERTICAL_ANGLE },
-            { x: 400, y: 200, angle: VERTICAL_ANGLE },
-            { x: 600, y: 300, angle: VERTICAL_ANGLE }
-        ],
-        walls: [
-            { x: 200, y: 150, width: 400, height: 30 },
-            { x: 500, y: 400, width: 300, height: 30 }
-        ],
-        goal: { x: 700, y: 100, radius: 30 },
-        playerStart: { x: 100, y: 384 } 
-    }
-};
-
-// Load level enemies, walls, goal
+// load level enemies, walls, goal
 function loadLevel(levelName) {
     const levelConfig = LEVELS[levelName];
     const canvas = gameEngine.ctx.canvas;
@@ -79,9 +40,14 @@ function loadLevel(levelName) {
         const g = levelConfig.goal;
         gameEngine.addEntity(new GoalCircle(gameEngine, g.x, g.y, g.radius));
     }
+
+    // call level-specific onLoad if defined
+    if (levelConfig.onLoad) {
+        levelConfig.onLoad(gameEngine);
+    }
 }
 
-// Reset level
+// reset level
 function resetLevel(game) {
     game.entities = [];
     game.gameState = "playing";
@@ -91,7 +57,7 @@ function resetLevel(game) {
     const canvas = game.ctx.canvas;
     const levelConfig = LEVELS[game.currentLevel];
 
-    // Player start position
+    // player start position
     let startX = canvas.width / 2;
     let startY = canvas.height / 2;
     if (levelConfig.playerStart) {
@@ -105,17 +71,26 @@ function resetLevel(game) {
     loadLevel(game.currentLevel);
 }
 
-// Level switching
+// level switching - goes to next level, returns to menu on final level
 function nextLevel() {
-    if (gameEngine.currentLevel === 'level1') {
-        gameEngine.currentLevel = 'level2';
-    } else {
-        gameEngine.currentLevel = 'level1';
+    const levelNames = Object.keys(LEVELS);
+    const currentIndex = levelNames.indexOf(gameEngine.currentLevel);
+    const nextIndex = currentIndex + 1;
+
+    if (nextIndex >= levelNames.length) {
+        // final level completed - return to menu
+        gameEngine.entities = [];
+        gameEngine.gameState = "menu";
+        gameEngine.message = "";
+        document.getElementById("gameMenu").style.display = "block";
+        return;
     }
+
+    gameEngine.currentLevel = levelNames[nextIndex];
     resetLevel(gameEngine);
 }
 
-// Menu start level
+// menu start level
 function startLevel(levelName) {
     gameEngine.currentLevel = levelName;
     resetLevel(gameEngine);
@@ -123,10 +98,10 @@ function startLevel(levelName) {
     document.getElementById("gameMenu").style.display = "none";
 }
 
-// Global flag for bounding circle debug
+// global flag for bounding circle debug
 gameEngine.showBoundingCircles = true;
 
-// Listen for key presses
+// listen for key presses
 window.addEventListener("keydown", function(e) {
     if (e.key === "5") { // toggle debug on/off
         gameEngine.showBoundingCircles = !gameEngine.showBoundingCircles;
@@ -134,15 +109,66 @@ window.addEventListener("keydown", function(e) {
     }
 });
 
-
-// Start game
+// start game
 ASSET_MANAGER.downloadAll(() => {
     const canvas = document.getElementById("gameWorld");
     const ctx = canvas.getContext("2d");
 
     gameEngine.init(ctx);
 
-    // Center menu
+    // add background (stars visible even on menu)
+    const menuBackground = new Background(gameEngine);
+    gameEngine.addEntity(menuBackground);
+
+    // --- AUDIO SETUP ---
+    const menuMusic = new Audio('./sounds/titlemenu.ogg');
+    menuMusic.loop = true;
+    menuMusic.volume = 0.5;
+
+    const level1Music = new Audio('./sounds/level1.ogg');
+    level1Music.loop = true;
+    level1Music.volume = 0.5;
+
+    // track if menu music has been played
+    let menuMusicStarted = false;
+
+    // play menu music on first user interaction
+    function startMenuMusic() {
+        if (!menuMusicStarted) {
+            menuMusic.play().catch(e => console.log("Menu music blocked:", e));
+            menuMusicStarted = true;
+        }
+        window.removeEventListener('click', startMenuMusic);
+        window.removeEventListener('keydown', startMenuMusic);
+    }
+
+    window.addEventListener('click', startMenuMusic);
+    window.addEventListener('keydown', startMenuMusic);
+
+    // override startLevel to stop menu music and start level music
+    const originalStartLevel = window.startLevel;
+    window.startLevel = function(levelName) {
+        // if menu music hasn't played yet, try to start it for autoplay policy
+        if (!menuMusicStarted) {
+            menuMusic.play().catch(e => console.log("Menu music blocked on start:", e));
+            menuMusicStarted = true;
+        }
+
+        // stop menu music
+        menuMusic.pause();
+        menuMusic.currentTime = 0;
+
+        // start level1 music if level1
+        if (levelName === 'level1') {
+            level1Music.play().catch(e => console.log("Level1 music blocked:", e));
+        }
+
+        // call original startLevel
+        originalStartLevel(levelName);
+    }
+    // --- END AUDIO SETUP ---
+
+    // center menu
     const menu = document.getElementById("gameMenu");
     menu.style.position = "absolute";
     menu.style.top = "50%";
