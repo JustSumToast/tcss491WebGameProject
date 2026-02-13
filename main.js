@@ -8,6 +8,7 @@ const ASSET_MANAGER = new AssetManager();
 // load assets
 ASSET_MANAGER.queueDownload("./images/playership.png");
 ASSET_MANAGER.queueDownload("./images/blackhole.png");
+ASSET_MANAGER.queueDownload("./images/Klik&PlayGraphicLibrarySpace.png");
 
 // track game state
 gameEngine.gameState = "menu"; // "menu", "playing", "won", "lost"

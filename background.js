@@ -1,12 +1,42 @@
 class Background {
     constructor(game) {
         this.game = game;
+        this.ctx = game.ctx;
+        this.spriteSheet = ASSET_MANAGER.getAsset("./images/Klik&PlayGraphicLibrarySpace.png");
+        console.log("SpritSheet:", this.spriteSheet);
+        const levelName = this.game.currentLevel;
+
+        this.planets = {
+        level1: {sx: 1348, sy:345, sw:33, sh:31},//Pluto
+        level2: {sx: 1282, sy:311, sw:54, sh:99},//Neptune
+        //level3: {sx: 1282, sy:311, sw:54, sh:99},// Uranus 
+        level4: {sx: 1245, sy:416, sw:178, sh:102}, //Saturn
+        //level5: {sx: 1057, sy:409, sw:184, sh:110}, //Jupiter
+        //level6: {sx: 1230, sy:336, sw:38, sh:40}, //Mars
+        //level7: {sx: 1165, sy:325, sw:62, sh:66}, //Earth
+        //level8: {sx: 1000, sy:330, sw:43, sh:42}, //Venus
+        //level9: {sx: 1079, sy:347, sw:28, sh:27}, // Mercury
+        //level10: {sx: 1000, sy:330, sw:69, sh:73} //Sun
+
+         };
+
+        this.planet = this.planets[levelName];
+        this.planetX = this.game.ctx.canvas.width - 220;
+        this.planetY = 60;
+        this.scale = 2
+
+
+
         this.stars = [];
         this.STAR_COUNT = 150;
         this.speedX = 0.2; // horizontal speed (pixels per frame)
         this.speedY = 0.3; // vertical speed (pixels per frame)
 
         this.makeStars();
+
+        if (!this.spriteSheet) {
+            console.error("Background image not loaded!")
+        }
     }
 
     makeStars() {
@@ -42,6 +72,8 @@ class Background {
     }
 
     draw(ctx) {
+        const w = this.game.ctx.canvas.width;
+        const h = this.game.ctx.canvas.height;
         ctx.save();
 
         ctx.globalAlpha = 1;
@@ -51,6 +83,20 @@ class Background {
         ctx.fillStyle = "white";
         for (const s of this.stars) {
             ctx.fillRect((s.x | 0), (s.y | 0), s.size, s.size);
+        }
+
+        if (this.spriteSheet && this.planet) {
+            ctx.drawImage(
+                this.spriteSheet,
+                this.planet.sx,
+                this.planet.sy,
+                this.planet.sw,
+                this.planet.sh,
+                this.planetX,
+                this.planetY,
+                this.planet.sw * this.scale,
+                this.planet.sh * this.scale
+            );
         }
 
         ctx.restore();
