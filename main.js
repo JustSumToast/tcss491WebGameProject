@@ -8,6 +8,7 @@ const ASSET_MANAGER = new AssetManager();
 // load assets
 ASSET_MANAGER.queueDownload("./images/playership.png");
 ASSET_MANAGER.queueDownload("./images/blackhole.png");
+ASSET_MANAGER.queueDownload("./images/Klik&PlayGraphicLibrarySpace.png");
 
 // track game state
 gameEngine.gameState = "menu"; // "menu", "playing", "won", "lost"
@@ -20,7 +21,7 @@ function loadLevel(levelName) {
     if (!levelConfig) return console.error(`Level ${levelName} not found`);
 
     gameEngine.currentLevel = levelName;
-    gameEngine.addEntity(new Background(gameEngine));
+
 
     levelConfig.enemies.forEach(enemyData => {
         const enemy = new EnemyShip(gameEngine, enemyData.x, enemyData.y, enemyData.angle);
@@ -44,6 +45,10 @@ function loadLevel(levelName) {
     if (levelConfig.onLoad) {
         levelConfig.onLoad(gameEngine);
     }
+
+    const bg = new Background(gameEngine);
+    gameEngine.addEntity(bg);
+
 }
 
 // reset level
@@ -80,6 +85,9 @@ function nextLevel() {
         gameEngine.entities = [];
         gameEngine.gameState = "menu";
         gameEngine.message = "";
+        gameEngine.currentLevel = null;
+        const menuBackground = new Background (gameEngine);
+        gameEngine.addEntity(menuBackground);
         document.getElementById("gameMenu").style.display = "block";
         return;
     }
