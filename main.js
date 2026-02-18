@@ -14,6 +14,7 @@ ASSET_MANAGER.queueDownload("./images/spacewalltexture.jpg");
 // track game state
 gameEngine.gameState = "menu"; // "menu", "playing", "won", "lost"
 gameEngine.message = "";
+gameEngine.elapsedTime = 0;
 
 // load level enemies, walls, goal
 function loadLevel(levelName) {
@@ -52,6 +53,7 @@ function loadLevel(levelName) {
 function resetLevel(game) {
     game.entities = [];
     game.gameState = "playing";
+    game.elapsedTime = 0;
     game.message = "";
 
     const canvas = game.ctx.canvas;
