@@ -60,6 +60,9 @@ function resetLevel(game) {
     game.gameState = "playing";
     game.elapsedTime = 0;
     game.message = "";
+    game.gravityType = null;
+    game.minGravity = 0;
+    game.maxGravity = 0;
 
     const canvas = game.ctx.canvas;
     const levelConfig = LEVELS[game.currentLevel];
