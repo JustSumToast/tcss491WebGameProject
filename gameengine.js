@@ -15,6 +15,11 @@ class GameEngine {
         this.wheel = null;
         this.keys = {};
 
+        // Information for timer
+        this.clockTick = 0;
+        this.timer = new Timer();
+        this.elapsedTime = 0;
+
         // Options and the Details
         this.options = options || {
             debugging: false,
@@ -106,10 +111,28 @@ class GameEngine {
         ctx.fillStyle = "yellow";
         ctx.fillText("Controls: W/S - Accelerate/Reverse | A/D - Turn Left/Right", 10, 40);
 
+        //timer
+        ctx.fillStyle = "white";
+        ctx.font = "20px Arial";
+        ctx.textAlign = "right";
+        ctx.textBaseline = "top";
+        const seconds = Math.floor(this.elapsedTime);
+        ctx.fillText(
+            `Time: ${seconds}s`,
+            canvas.width - 20,
+            20
+        );
+
         ctx.restore();
     };
 
     update() {
+        if (this.gameState === "playing") {
+            this.elapsedTime += this.clockTick;
+        }
+
+
+
         let entitiesCount = this.entities.length;
 
         for (let i = 0; i < entitiesCount; i++) {
