@@ -27,7 +27,7 @@ LEVELS.level8 = {
     
     onLoad: function(game) {
         // Add fog ON TOP of everything
-        game.entities.unshift(new Fog(game, 200));
+        game.entities.unshift(new Fog(game, 180));
     }
 };
 
