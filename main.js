@@ -9,10 +9,13 @@ const ASSET_MANAGER = new AssetManager();
 ASSET_MANAGER.queueDownload("./images/playership.png");
 ASSET_MANAGER.queueDownload("./images/blackhole.png");
 ASSET_MANAGER.queueDownload("./images/Klik&PlayGraphicLibrarySpace.png");
+ASSET_MANAGER.queueDownload("./images/parkingptexture.png");
+ASSET_MANAGER.queueDownload("./images/spacewalltexture.jpg");
 
 // track game state
 gameEngine.gameState = "menu"; // "menu", "playing", "won", "lost"
 gameEngine.message = "";
+gameEngine.elapsedTime = 0;
 
 // load level enemies, walls, goal
 function loadLevel(levelName) {
@@ -55,6 +58,7 @@ function loadLevel(levelName) {
 function resetLevel(game) {
     game.entities = [];
     game.gameState = "playing";
+    game.elapsedTime = 0;
     game.message = "";
 
     const canvas = game.ctx.canvas;

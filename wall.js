@@ -1,15 +1,18 @@
 class Wall extends Entity {
     constructor(game, x, y, width, height) {
         super(game, x, y);
+
         this.width = width;
         this.height = height;
-        this.sprite = this.sprite;
+
+        this.sprite = ASSET_MANAGER.getAsset("./images/spacewalltexture.jpg");
+        this.pattern = null;
 
         this.boundingCircle = {
             x: this.x,
             y: this.y,
             radius: 1
-        }
+        };
 
         this.boundingRect = {
             x: this.x,
@@ -17,13 +20,9 @@ class Wall extends Entity {
             width: this.width,
             height: this.height
         };
-        
     }
 
-    
-
     update() {
-        // keep colliders in sync
         this.boundingCircle.x = this.x;
         this.boundingCircle.y = this.y;
 
@@ -34,35 +33,24 @@ class Wall extends Entity {
     draw(ctx) {
         ctx.save();
 
-        if (this.sprite) {
-            // Draw sprite centered
-            ctx.drawImage(
-                this.sprite,
-                this.x - this.width / 2,
-                this.y - this.height / 2,
-                this.width,
-                this.height
-            );
-        } else {
-            // Fallback rectangle (debug / placeholder)
-            ctx.fillStyle = "gray";
-            ctx.fillRect(
-                this.x - this.width / 2,
-                this.y - this.height / 2,
-                this.width,
-                this.height
-            );
+        const left = this.x - this.width / 2;
+        const top = this.y - this.height / 2;
+
+        if (this.sprite && this.sprite.complete && this.sprite.naturalWidth > 0) {
+
+            if (!this.pattern) {
+                this.pattern = ctx.createPattern(this.sprite, "repeat");
+            }
+
+            if (this.pattern) {
+                ctx.fillStyle = this.pattern;
+                ctx.fillRect(left, top, this.width, this.height);
+            }
         }
 
-        // 🔍 Debug outline colliders
         if (this.game.options.debugging) {
             ctx.strokeStyle = "yellow";
-            ctx.strokeRect(
-                this.x - this.width / 2,
-                this.y - this.height / 2,
-                this.width,
-                this.height
-            );
+            ctx.strokeRect(left, top, this.width, this.height);
         }
 
         ctx.restore();
