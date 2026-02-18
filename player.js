@@ -175,20 +175,6 @@ class PlayerShip extends Entity {
     // Draw bounding circle
     this.boundingCircle.draw(ctx);
 
-    // Draw message if game over/win
-    if (this.game.gameState !== "playing") {
-      ctx.save();
-      ctx.fillStyle = "yellow";
-      ctx.font = "48px Arial";
-      ctx.textAlign = "center";
-      ctx.fillText(
-        this.game.message,
-        ctx.canvas.width / 2,
-        ctx.canvas.height / 2,
-      );
-      ctx.restore();
-    }
-
     // Optional velocity vector
     if (this.game.options.debugging) {
       ctx.strokeStyle = "green";

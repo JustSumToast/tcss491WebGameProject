@@ -106,6 +106,23 @@ class GameEngine {
         ctx.fillStyle = "yellow";
         ctx.fillText("Controls: W/S - Accelerate/Reverse | A/D - Turn Left/Right", 10, 40);
 
+        // === Win / Lose message ===
+        if (this.gameState !== "playing") {
+            ctx.save();
+            ctx.fillStyle = this.gameState === "won" ? "yellow" : "red";
+            ctx.font = "48px Arial";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+
+            ctx.fillText(
+                this.message,
+                canvas.width / 2,
+                canvas.height / 2
+            );
+
+            ctx.restore();
+        }
+
         ctx.restore();
     };
 
@@ -136,3 +153,4 @@ class GameEngine {
 };
 
 // KV Le was here :)
+// Who is KV Le? :o
