@@ -22,14 +22,12 @@ LEVELS.level8 = {
     ],
 
     goal: {
-        x: 100,
-        y: 500,
-        radius: 30
+        x: 100, y: 500, radius: 30
     },
     
     onLoad: function(game) {
         // Add fog ON TOP of everything
-        game.entities.unshift(new Fog(game, 100));
+        game.entities.unshift(new Fog(game, 200));
     }
 };
 
