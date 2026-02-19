@@ -71,6 +71,41 @@ class PlayerShip extends Entity {
     // Update velocity & position
     this.vx = Math.cos(this.angle) * this.speed;
     this.vy = Math.sin(this.angle) * this.speed;
+    
+    if (this.game.gravityType === "distanceFromGoal") {
+
+    const goal = this.game.entities.find(e => e instanceof GoalCircle);
+
+    if (goal) {
+        // Vector AWAY from goal
+        const dx = this.x - goal.x;
+        const dy = this.y - goal.y;
+
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        const canvas = this.game.ctx.canvas;
+        const maxDistance = Math.sqrt(canvas.width**2 + canvas.height**2);
+
+        // Normalize distance (0 → 1)
+        let factor = distance / maxDistance;
+
+        // Optional smoother curve
+        factor = factor * factor;
+
+        const minG = this.game.minGravity || 0;
+        const maxG = this.game.maxGravity || 0;
+
+        // Scale between min and max
+        const strength = minG + factor * (maxG - minG);
+
+        // Direction AWAY from goal
+        const angle = Math.atan2(dy, dx);
+
+        this.vx += Math.cos(angle) * strength * this.game.clockTick;
+        this.vy += Math.sin(angle) * strength * this.game.clockTick;
+    }
+};
+
     this.x += this.vx * dt;
     this.y += this.vy * dt;
 
@@ -92,7 +127,7 @@ class PlayerShip extends Entity {
 
       // Lose condition
       if (this.boundingCircle.collide(entity.boundingCircle)) {
-        if (entity instanceof EnemyShip) {
+        if (entity instanceof EnemyShip || entity instanceof FireAsteroid) {
           this.HP -= 1;
           console.log("You collided with an enemy! HP:", this.HP);
           if (this.HP <= 0) {
@@ -139,20 +174,6 @@ class PlayerShip extends Entity {
 
     // Draw bounding circle
     this.boundingCircle.draw(ctx);
-
-    // Draw message if game over/win
-    if (this.game.gameState !== "playing") {
-      ctx.save();
-      ctx.fillStyle = "yellow";
-      ctx.font = "48px Arial";
-      ctx.textAlign = "center";
-      ctx.fillText(
-        this.game.message,
-        ctx.canvas.width / 2,
-        ctx.canvas.height / 2,
-      );
-      ctx.restore();
-    }
 
     // Optional velocity vector
     if (this.game.options.debugging) {

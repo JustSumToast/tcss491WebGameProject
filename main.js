@@ -8,12 +8,16 @@ const ASSET_MANAGER = new AssetManager();
 // load assets
 ASSET_MANAGER.queueDownload("./images/playership.png");
 ASSET_MANAGER.queueDownload("./images/blackhole.png");
+ASSET_MANAGER.queueDownload("./images/Klik&PlayGraphicLibrarySpace.png");
 ASSET_MANAGER.queueDownload("./images/parkingptexture.png");
 ASSET_MANAGER.queueDownload("./images/spacewalltexture.jpg");
+ASSET_MANAGER.queueDownload("./images/sun.png");
+ASSET_MANAGER.queueDownload("./images/fireball1.png");
 
 // track game state
 gameEngine.gameState = "menu"; // "menu", "playing", "won", "lost"
 gameEngine.message = "";
+gameEngine.elapsedTime = 0;
 
 // load level enemies, walls, goal
 function loadLevel(levelName) {
@@ -22,7 +26,7 @@ function loadLevel(levelName) {
     if (!levelConfig) return console.error(`Level ${levelName} not found`);
 
     gameEngine.currentLevel = levelName;
-    gameEngine.addEntity(new Background(gameEngine));
+
 
     levelConfig.enemies.forEach(enemyData => {
         const enemy = new EnemyShip(gameEngine, enemyData.x, enemyData.y, enemyData.angle);
@@ -46,13 +50,21 @@ function loadLevel(levelName) {
     if (levelConfig.onLoad) {
         levelConfig.onLoad(gameEngine);
     }
+
+    const bg = new Background(gameEngine);
+    gameEngine.addEntity(bg);
+
 }
 
 // reset level
 function resetLevel(game) {
     game.entities = [];
     game.gameState = "playing";
+    game.elapsedTime = 0;
     game.message = "";
+    game.gravityType = null;
+    game.minGravity = 0;
+    game.maxGravity = 0;
 
     const canvas = game.ctx.canvas;
     const levelConfig = LEVELS[game.currentLevel];
@@ -82,6 +94,9 @@ function nextLevel() {
         gameEngine.entities = [];
         gameEngine.gameState = "menu";
         gameEngine.message = "";
+        gameEngine.currentLevel = null;
+        const menuBackground = new Background (gameEngine);
+        gameEngine.addEntity(menuBackground);
         document.getElementById("gameMenu").style.display = "block";
         return;
     }

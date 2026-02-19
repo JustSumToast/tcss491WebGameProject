@@ -15,6 +15,11 @@ class GameEngine {
         this.wheel = null;
         this.keys = {};
 
+        // Information for timer
+        this.clockTick = 0;
+        this.timer = new Timer();
+        this.elapsedTime = 0;
+
         // Options and the Details
         this.options = options || {
             debugging: false,
@@ -106,10 +111,44 @@ class GameEngine {
         ctx.fillStyle = "yellow";
         ctx.fillText("Controls: W/S - Accelerate/Reverse | A/D - Turn Left/Right", 10, 40);
 
+        // === Win / Lose message ===
+        if (this.gameState !== "playing") {
+            ctx.save();
+            ctx.fillStyle = this.gameState === "won" ? "yellow" : "red";
+            ctx.font = "48px Arial";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+
+            ctx.fillText(
+                this.message,
+                canvas.width / 2,
+                canvas.height / 2
+            );
+
+            ctx.restore();
+        }
+        //timer
+        ctx.fillStyle = "white";
+        ctx.font = "20px Arial";
+        ctx.textAlign = "right";
+        ctx.textBaseline = "top";
+        const seconds = Math.floor(this.elapsedTime);
+        ctx.fillText(
+            `Time: ${seconds}s`,
+            canvas.width - 20,
+            20
+        );
+
         ctx.restore();
     };
 
     update() {
+        if (this.gameState === "playing") {
+            this.elapsedTime += this.clockTick;
+        }
+
+
+
         let entitiesCount = this.entities.length;
 
         for (let i = 0; i < entitiesCount; i++) {
@@ -136,3 +175,4 @@ class GameEngine {
 };
 
 // KV Le was here :)
+// Who is KV Le? :o

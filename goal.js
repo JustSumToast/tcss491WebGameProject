@@ -46,7 +46,7 @@ update() {
       this.game.gameState = "won";
       this.game.message = "YOU WIN!";
       entity.speed = 0;
-      setTimeout(() => nextLevel(this.game), 2000);
+      setTimeout(() => {this.game.elapsedTime = 0; nextLevel(this.game);}, 2000);
     }
   }
 
