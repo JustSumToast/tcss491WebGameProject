@@ -1,7 +1,7 @@
 const VERT_ANGLE = Math.PI / 2;
 
-const LEVEL_MARS = {
-    name: 'levelmars',
+const LEVEL_6 = {
+    name: 'level6',
     enemies: [
         
     ],
@@ -63,4 +63,4 @@ class FlyingEnemy extends EnemyShip {
 
 
 if (typeof LEVELS === 'undefined') window.LEVELS = {};
-LEVELS['levelmars'] = LEVEL_MARS;
+LEVELS['level6'] = LEVEL_6;
