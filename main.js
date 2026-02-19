@@ -10,6 +10,8 @@ ASSET_MANAGER.queueDownload("./images/playership.png");
 ASSET_MANAGER.queueDownload("./images/blackhole.png");
 ASSET_MANAGER.queueDownload("./images/parkingptexture.png");
 ASSET_MANAGER.queueDownload("./images/spacewalltexture.jpg");
+ASSET_MANAGER.queueDownload("./images/sun.png");
+ASSET_MANAGER.queueDownload("./images/fireball1.png");
 
 // track game state
 gameEngine.gameState = "menu"; // "menu", "playing", "won", "lost"

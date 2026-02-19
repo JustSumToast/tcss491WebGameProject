@@ -92,7 +92,7 @@ class PlayerShip extends Entity {
 
       // Lose condition
       if (this.boundingCircle.collide(entity.boundingCircle)) {
-        if (entity instanceof EnemyShip) {
+        if (entity instanceof EnemyShip || entity instanceof FireAsteroid) {
           this.HP -= 1;
           console.log("You collided with an enemy! HP:", this.HP);
           if (this.HP <= 0) {
