@@ -11,8 +11,6 @@ ASSET_MANAGER.queueDownload("./images/blackhole.png");
 ASSET_MANAGER.queueDownload("./images/Klik&PlayGraphicLibrarySpace.png");
 ASSET_MANAGER.queueDownload("./images/parkingptexture.png");
 ASSET_MANAGER.queueDownload("./images/spacewalltexture.jpg");
-ASSET_MANAGER.queueDownload("./images/sun.png");
-ASSET_MANAGER.queueDownload("./images/fireball1.png");
 
 // track game state
 gameEngine.gameState = "menu"; // "menu", "playing", "won", "lost"
@@ -26,7 +24,6 @@ function loadLevel(levelName) {
     if (!levelConfig) return console.error(`Level ${levelName} not found`);
 
     gameEngine.currentLevel = levelName;
-
 
     levelConfig.enemies.forEach(enemyData => {
         const enemy = new EnemyShip(gameEngine, enemyData.x, enemyData.y, enemyData.angle);
@@ -46,14 +43,12 @@ function loadLevel(levelName) {
         gameEngine.addEntity(new GoalCircle(gameEngine, g.x, g.y, g.radius));
     }
 
-    // call level-specific onLoad if defined
     if (levelConfig.onLoad) {
         levelConfig.onLoad(gameEngine);
     }
 
     const bg = new Background(gameEngine);
     gameEngine.addEntity(bg);
-
 }
 
 // reset level
@@ -69,9 +64,9 @@ function resetLevel(game) {
     const canvas = game.ctx.canvas;
     const levelConfig = LEVELS[game.currentLevel];
 
-    // player start position
     let startX = canvas.width / 2;
     let startY = canvas.height / 2;
+
     if (levelConfig.playerStart) {
         startX = levelConfig.playerStart.x ?? startX;
         startY = levelConfig.playerStart.y ?? startY;
@@ -83,20 +78,21 @@ function resetLevel(game) {
     loadLevel(game.currentLevel);
 }
 
-// level switching - goes to next level, returns to menu on final level
+// level switching
 function nextLevel() {
     const levelNames = Object.keys(LEVELS);
     const currentIndex = levelNames.indexOf(gameEngine.currentLevel);
     const nextIndex = currentIndex + 1;
 
     if (nextIndex >= levelNames.length) {
-        // final level completed - return to menu
         gameEngine.entities = [];
         gameEngine.gameState = "menu";
         gameEngine.message = "";
         gameEngine.currentLevel = null;
-        const menuBackground = new Background (gameEngine);
+
+        const menuBackground = new Background(gameEngine);
         gameEngine.addEntity(menuBackground);
+
         document.getElementById("gameMenu").style.display = "block";
         return;
     }
@@ -113,12 +109,11 @@ function startLevel(levelName) {
     document.getElementById("gameMenu").style.display = "none";
 }
 
-// global flag for bounding circle debug
+// debug toggle
 gameEngine.showBoundingCircles = true;
 
-// listen for key presses
 window.addEventListener("keydown", function(e) {
-    if (e.key === "5") { // toggle debug on/off
+    if (e.key === "5") {
         gameEngine.showBoundingCircles = !gameEngine.showBoundingCircles;
         console.log("Bounding circles debug:", gameEngine.showBoundingCircles);
     }
@@ -131,23 +126,24 @@ ASSET_MANAGER.downloadAll(() => {
 
     gameEngine.init(ctx);
 
-    // add background (stars visible even on menu)
     const menuBackground = new Background(gameEngine);
     gameEngine.addEntity(menuBackground);
 
-    // --- AUDIO SETUP ---
+    // audio for game
     const menuMusic = new Audio('./sounds/titlemenu.ogg');
     menuMusic.loop = true;
-    menuMusic.volume = 0.5;
+    menuMusic.volume = 0.4;
 
     const level1Music = new Audio('./sounds/level1.ogg');
     level1Music.loop = true;
     level1Music.volume = 0.5;
 
-    // track if menu music has been played
+    // hover sound effect
+    const menuHoverSound = new Audio('./sounds/menubutton.mp3');
+    menuHoverSound.volume = 0.5;
+
     let menuMusicStarted = false;
 
-    // play menu music on first user interaction
     function startMenuMusic() {
         if (!menuMusicStarted) {
             menuMusic.play().catch(e => console.log("Menu music blocked:", e));
@@ -160,28 +156,23 @@ ASSET_MANAGER.downloadAll(() => {
     window.addEventListener('click', startMenuMusic);
     window.addEventListener('keydown', startMenuMusic);
 
-    // override startLevel to stop menu music and start level music
     const originalStartLevel = window.startLevel;
     window.startLevel = function(levelName) {
-        // if menu music hasn't played yet, try to start it for autoplay policy
+
         if (!menuMusicStarted) {
             menuMusic.play().catch(e => console.log("Menu music blocked on start:", e));
             menuMusicStarted = true;
         }
 
-        // stop menu music
         menuMusic.pause();
         menuMusic.currentTime = 0;
 
-        // start level1 music if level1
         if (levelName === 'level1') {
             level1Music.play().catch(e => console.log("Level1 music blocked:", e));
         }
 
-        // call original startLevel
         originalStartLevel(levelName);
-    }
-    // --- END AUDIO SETUP ---
+    };
 
     // center menu
     const menu = document.getElementById("gameMenu");
@@ -189,7 +180,17 @@ ASSET_MANAGER.downloadAll(() => {
     menu.style.top = "50%";
     menu.style.left = "50%";
     menu.style.transform = "translate(-50%, -50%)";
-
     menu.style.display = "block";
+
+    // hover over buttons
+    const buttons = menu.querySelectorAll("button");
+
+    buttons.forEach(button => {
+        button.addEventListener("mouseenter", () => {
+            menuHoverSound.currentTime = 0;
+            menuHoverSound.play().catch(e => console.log("Hover sound blocked:", e));
+        });
+    });
+
     gameEngine.start();
 });
