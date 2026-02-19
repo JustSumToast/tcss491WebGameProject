@@ -12,7 +12,7 @@ class Background {
         //level3: {sx: 1282, sy:311, sw:54, sh:99 x: , y: },// Uranus 
         level4: {sx: 1245, sy:416, sw:178, sh:102, x: 650, y: 400}, //Saturn
         level5: {sx: 1057, sy:409, sw:184, sh:110, x: 50, y: 500}, //Jupiter
-        //level6: {sx: 1230, sy:336, sw:38, sh:40 x: , y: }, //Mars
+        levelmars: {sx: 1230, sy:336, sw:38, sh:40, x: 100 , y: 500 }, //Mars
         //level7: {sx: 1165, sy:325, sw:62, sh:66 x: , y: }, //Earth
         level8: {sx: 1000, sy:413, sw:43, sh:44, x: 700, y: 100 }, //Venus
         //level9: {sx: 1079, sy:347, sw:28, sh:27 x: , y: }, // Mercury
