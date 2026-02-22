@@ -112,7 +112,7 @@ function startLevel(levelName) {
 }
 
 // debug toggle
-gameEngine.showBoundingCircles = true;
+gameEngine.showBoundingCircles = false;
 
 window.addEventListener("keydown", function(e) {
     if (e.key === "5") {
