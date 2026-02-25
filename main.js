@@ -40,6 +40,11 @@ function loadLevel(levelName) {
         });
     }
 
+    if (levelConfig.interactables) {
+        levelConfig.interactables.forEach(data => {
+            gameEngine.addEntity(new Interactable(gameEngine, data.x, data.y, data.type));
+        });
+    }
     if (levelConfig.goal) {
         const g = levelConfig.goal;
         gameEngine.addEntity(new GoalCircle(gameEngine, g.x, g.y, g.radius));

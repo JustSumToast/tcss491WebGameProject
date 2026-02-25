@@ -50,6 +50,12 @@ const LEVEL_1 = {
         { x: 1025, y: 500, width: 100, height: 1000}
 
     ],
+
+    interactables: [
+        {x:600, y: 600, type: "shield"},
+        {x:700, y: 600, type: "bug"}
+    ],
+
     goal: { x: 725, y: 450, radius: 25},
 
     playerStart: { x: 500, y: 650 }
