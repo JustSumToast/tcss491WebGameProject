@@ -16,8 +16,12 @@ class Sun extends Entity {
         this.frameTimer = 0;
         this.frameDuration = 0.2;
         this.removeFromWorld = false;
-        // no boundingCircle = no collision
-        this.boundingCircle = null;
+        this.radius = (size / 2) * 0.85;
+        this.updateBoundingCircle();
+
+        // burn countdown
+        this.burnDuration = 10;
+        this.burnTimer = this.burnDuration;
 
         // asteroid spawning
         this.spawnTimer = 0;
@@ -29,6 +33,17 @@ class Sun extends Entity {
         if (this.frameTimer >= this.frameDuration) {
             this.frameTimer -= this.frameDuration;
             this.currentFrame = (this.currentFrame + 1) % this.frameCount;
+        }
+
+        // countdown burn timer
+        if (this.game.gameState === "playing") {
+            this.burnTimer -= this.game.clockTick;
+            if (this.burnTimer <= 0) {
+                this.burnTimer = 0;
+                this.game.gameState = "lost";
+                this.game.message = "YOU BURNED!";
+                setTimeout(() => resetLevel(this.game), 2000);
+            }
         }
 
         // spawn fire asteroids
@@ -50,5 +65,41 @@ class Sun extends Entity {
 
     draw(ctx) {
         this.drawSprite(ctx, this.x, this.y, 0, this.currentFrame);
+        this.drawHeatBar(ctx);
+    }
+
+    drawHeatBar(ctx) {
+        const canvas = ctx.canvas;
+        const barW = 200;
+        const barH = 16;
+        const barX = (canvas.width - barW) / 2;
+        const barY = 58;
+        // filled proportion grows from 0 (full time) to 1 (burned)
+        const filled = 1 - (this.burnTimer / this.burnDuration);
+        // color fades from dark grey (empty) to bright red (full)
+        const red = Math.round(filled * 255);
+        ctx.save();
+
+        // background
+        ctx.fillStyle = "#333";
+        ctx.fillRect(barX, barY, barW, barH);
+
+        // heat fill
+        ctx.fillStyle = `rgb(${red}, 0, 0)`;
+        ctx.fillRect(barX, barY, barW * filled, barH);
+
+        // border
+        ctx.strokeStyle = "#fff";
+        ctx.lineWidth = 1;
+        ctx.strokeRect(barX, barY, barW, barH);
+
+        // label
+        ctx.fillStyle = "white";
+        ctx.font = "bold 12px Arial";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(`HEAT: ${Math.ceil(this.burnTimer)}s`, canvas.width / 2, barY + barH / 2);
+
+        ctx.restore();
     }
 }

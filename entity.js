@@ -10,6 +10,7 @@ class Entity {
         this.width = width;
         this.height = height;
         this.removeFromWorld = false;
+        this.zIndex = 0;
 
         // Calculate radius for bounding circle (use larger dimension)
         this.radius = Math.max(width, height) / 2;
