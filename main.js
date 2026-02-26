@@ -13,6 +13,7 @@ ASSET_MANAGER.queueDownload("./images/parkingptexture.png");
 ASSET_MANAGER.queueDownload("./images/spacewalltexture.jpg");
 ASSET_MANAGER.queueDownload("./images/sun.png");
 ASSET_MANAGER.queueDownload("./images/fireball1.png");
+ASSET_MANAGER.queueDownload("./images/enemyShipD1.png");
 
 // track game state
 gameEngine.gameState = "menu"; // "menu", "playing", "won", "lost"
@@ -28,7 +29,7 @@ function loadLevel(levelName) {
     gameEngine.currentLevel = levelName;
 
     levelConfig.enemies.forEach(enemyData => {
-        const enemy = new EnemyShip(gameEngine, enemyData.x, enemyData.y, enemyData.angle);
+        const enemy = new EnemyShip(gameEngine, enemyData.x, enemyData.y, enemyData.angle, enemyData.spriteConfig || null);
         gameEngine.addEntity(enemy);
     });
 

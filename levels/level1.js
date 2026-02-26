@@ -1,5 +1,6 @@
 // Level 1 - Pluto's Parking Lot
 const VERTICAL_ANGLE = Math.PI;
+const HORIZONTAL_ANGLE = Math.PI*3/2;
 const SLOT_WIDTH = 25;
 const BUFFER_SPACE = 55;
 
@@ -7,31 +8,33 @@ const GAP_1X = SLOT_WIDTH + BUFFER_SPACE + SLOT_WIDTH;
 const GAP_2X = SLOT_WIDTH + (BUFFER_SPACE + SLOT_WIDTH * 2);
 const GAP_3X = SLOT_WIDTH + (BUFFER_SPACE + SLOT_WIDTH * 3);
 
+const ENEMY_D1 = { path: "./images/enemyShipD1.png", frameWidth: 632, frameHeight: 395, frameCount: 1, scale: 0.2 };
+
 const LEVEL_1 = {
     name: 'level1',
     enemies: [
         // top row
-        { x: 200, y: 150, angle: VERTICAL_ANGLE}, 
-        { x: 200 + GAP_1X, y: 150, angle: VERTICAL_ANGLE},
+        { x: 200, y: 150, angle: VERTICAL_ANGLE},
+        { x: 200 + GAP_1X, y: 150, angle: HORIZONTAL_ANGLE, spriteConfig: ENEMY_D1},
         { x: 200 + GAP_1X * 2, y: 150, angle: VERTICAL_ANGLE},
-        { x: 200 + GAP_1X * 3, y: 150, angle: VERTICAL_ANGLE},
+        { x: 200 + GAP_1X * 3, y: 150, angle: HORIZONTAL_ANGLE, spriteConfig: ENEMY_D1},
         { x: 200 + GAP_1X * 4, y: 150, angle: VERTICAL_ANGLE},
-        { x: 200 + GAP_1X * 5, y: 150, angle: VERTICAL_ANGLE},
+        { x: 200 + GAP_1X * 5, y: 150, angle: HORIZONTAL_ANGLE, spriteConfig: ENEMY_D1},
         { x: 200 + GAP_1X * 6, y: 150, angle: VERTICAL_ANGLE},
 
         // middle row
-        { x: 200, y: 300, angle: VERTICAL_ANGLE}, 
+        { x: 200, y: 300, angle: HORIZONTAL_ANGLE, spriteConfig: ENEMY_D1},
         { x: 200 + GAP_1X, y: 300, angle: VERTICAL_ANGLE},
-        { x: 200 + GAP_1X * 2, y: 300, angle: VERTICAL_ANGLE},
+        { x: 200 + GAP_1X * 2, y: 300, angle: HORIZONTAL_ANGLE, spriteConfig: ENEMY_D1},
         { x: 200 + GAP_1X * 3, y: 300, angle: VERTICAL_ANGLE},
-        { x: 200 + GAP_1X * 4, y: 300, angle: VERTICAL_ANGLE},
+        { x: 200 + GAP_1X * 4, y: 300, angle: HORIZONTAL_ANGLE, spriteConfig: ENEMY_D1},
         { x: 200 + GAP_1X * 5, y: 300, angle: VERTICAL_ANGLE},
-        { x: 200 + GAP_1X * 6, y: 300, angle: VERTICAL_ANGLE},
+        { x: 200 + GAP_1X * 6, y: 300, angle: HORIZONTAL_ANGLE, spriteConfig: ENEMY_D1},
 
         // bottom row
-        { x: 200, y: 450, angle: VERTICAL_ANGLE}, 
+        { x: 200, y: 450, angle: VERTICAL_ANGLE},
         { x: 200 + GAP_1X, y: 450, angle: VERTICAL_ANGLE},
-        { x: 200 + GAP_1X * 2, y: 450, angle: VERTICAL_ANGLE},
+        { x: 200 + GAP_1X * 2, y: 450, angle: HORIZONTAL_ANGLE, spriteConfig: ENEMY_D1},
         { x: 200 + GAP_1X * 3, y: 450, angle: VERTICAL_ANGLE},
         { x: 200 + GAP_1X * 4, y: 450, angle: VERTICAL_ANGLE},
         { x: 200 + GAP_1X * 6, y: 450, angle: VERTICAL_ANGLE}
