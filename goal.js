@@ -12,41 +12,60 @@ class GoalCircle extends Entity {
     // Texture
     this.sprite = ASSET_MANAGER.getAsset("./images/parkingptexture.png");
 
+    // **Win sound**
+    this.winSound = new Audio("./sounds/winnoise.mp3");
+    this.winSound.volume = 0.5;
+
     this.updateBoundingCircle();
   }
 
+  // Update the bounding circle for collision detection
   updateBoundingCircle() {
     this.boundingCircle = new BoundingCircle(this.x, this.y, this.radius);
   }
 
-update() {
+  update() {
+    // Check all entities for interaction with goal
     for (let entity of this.game.entities) {
         if (entity instanceof PlayerShip) {
             // checking if speed is low/stopped
             const lowSpeedThreshold = 15; // adjust as needed
             const isSlow = Math.abs(entity.speed) <= lowSpeedThreshold;
 
-            // goal handling
+            // goal handling: player must be within circle and moving slowly
             const isHolding = this.boundingCircle.collide(entity.boundingCircle) && isSlow;
 
             if (isHolding) {
+                // increment hold time while staying in position
                 this.holdTime += this.game.clockTick * 1000;
+
+                // trigger win if holdTime exceeds threshold
                 if (this.holdTime >= this.winThreshold) {
                     this.triggerWin(entity);
                 }
             } else {
+                // reset hold time if player moves away
                 this.holdTime = 0;
             }
         }
     }
-}
+  }
 
+  // Called when player wins
   triggerWin(entity) {
     if (this.game.gameState !== "won") {
       this.game.gameState = "won";
       this.game.message = "YOU WIN!";
       entity.speed = 0;
-      setTimeout(() => {this.game.elapsedTime = 0; nextLevel(this.game);}, 2000);
+
+      // **Play win sound**
+      this.winSound.play().catch(() => {});
+
+      // Proceed to next level after 2 seconds
+      setTimeout(() => {
+        this.game.elapsedTime = 0;
+        nextLevel(this.game);
+      }, 2000);
     }
   }
 
@@ -56,7 +75,7 @@ update() {
     const left = this.x - this.size / 2;
     const top = this.y - this.size / 2;
 
-    // texture for square
+    // Draw texture for square
     if (this.sprite && this.sprite.complete) {
       ctx.drawImage(
         this.sprite,
@@ -69,6 +88,7 @@ update() {
       ctx.fillStyle = "blue";
       ctx.fillRect(left, top, this.size, this.size);
     }
+    
 
     // animated shrinking square meter
     if (this.holdTime > 0) {

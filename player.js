@@ -19,6 +19,10 @@ class PlayerShip extends Entity {
         this.rocketSound.volume = 0.2;
         this.isRocketPlaying = false;
 
+        // **Lose sound**
+        this.loseSound = new Audio("./sounds/losenoise.mp3");
+        this.loseSound.volume = 0.5;
+
         // Sprite setup
         this.setupSprite({
             path: "./images/playership.png",
@@ -122,6 +126,10 @@ class PlayerShip extends Entity {
                         this.game.message = "YOU LOSE!";
                         this.speed = 0;
                         this.stopRocketSound();
+
+                        // Play lose sound
+                        this.loseSound.play().catch(() => {});
+
                         setTimeout(() => resetLevel(this.game), 2000);
                         return;
                     }
@@ -132,12 +140,16 @@ class PlayerShip extends Entity {
             if (entity.boundingRect && this.circleRectCollide(this.boundingCircle, entity.boundingRect)) {
                 if (entity instanceof Wall) {
                     this.HP -= 1;
-                    console.log("You collided with an enemy! HP:", this.HP);
+                    console.log("You collided with an obstacle! HP:", this.HP);
                     if (this.HP <= 0) {
                         this.game.gameState = "lost";
                         this.game.message = "YOU LOSE!";
                         this.speed = 0;
                         this.stopRocketSound();
+
+                        // Play lose sound
+                        this.loseSound.play().catch(() => {});
+
                         setTimeout(() => resetLevel(this.game), 2000);
                         return;
                     }

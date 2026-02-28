@@ -8,7 +8,7 @@ class Background {
 
         this.planets = {
         level1: {sx: 1348, sy:345, sw:33, sh:31, x: 100, y: 550},//Pluto
-        level2: {sx: 1282, sy:311, sw:54, sh:99, x: 620, y: 450},//Neptune
+        level2: {sx: 1282, sy:311, sw:54, sh:99, x: 750, y: 500},//Neptune
         //level3: {sx: 1282, sy:311, sw:54, sh:99 x: , y: },// Uranus 
         level4: {sx: 1245, sy:416, sw:178, sh:102, x: 650, y: 400}, //Saturn
         level5: {sx: 1057, sy:409, sw:184, sh:110, x: 50, y: 500}, //Jupiter
