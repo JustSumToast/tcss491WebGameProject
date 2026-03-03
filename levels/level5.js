@@ -28,6 +28,11 @@ LEVELS.level5 = {
 
     ],
 
+    interactables: [
+        {x:450, y: 400, type: "squid"},
+        {x:600, y: 600, type: "shield"}
+    ],
+
     goal: {
         x: 515, y: 60, radius: 30
     },

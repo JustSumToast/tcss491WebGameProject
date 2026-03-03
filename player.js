@@ -42,7 +42,7 @@ class PlayerShip extends Entity {
         //Squid ink
         this.inked = false;
         this.inkTimer = 0;
-        this.inkDuration = 10;
+        this.inkDuration = 6;
         this.inkSprite = new Image();
         this.inkSprite.src = "./images/greenink.png";
         this.inkFrameCount = 4;

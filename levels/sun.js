@@ -16,10 +16,18 @@ const SUN_LEVEL = {
     goal: { x: 880, y: 384, radius: 25 },
     playerStart: { x: 150, y: 650 },
 
+    interactables: [
+        {x:500, y: 600, type: "shield"},
+        {x:200, y: 400, type: "shield"},
+        {x:750, y: 250, type: "shield"}
+    ],
+
     onLoad: function(game) {
         // add sun at center
         game.addEntity(new Sun(game, SUN_LEVEL_CENTER_X, SUN_LEVEL_CENTER_Y, 240));
     }
+
+
 };
 
 // Register to global LEVELS object
