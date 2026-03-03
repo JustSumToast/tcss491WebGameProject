@@ -23,6 +23,12 @@ class PlayerShip extends Entity {
         this.time = 0; // for shield animation
         this.prevDir = null;
 
+        // Shield sounds
+        this.shieldAcquireSound = new Audio("./sounds/shieldAcquireSound.mp3");
+        this.shieldAcquireSound.volume = 0.6;
+        this.shieldBreakSound = new Audio("./sounds/shieldBreakSound.mp3");
+        this.shieldBreakSound.volume = 0.6;
+
         // Rocket moving sound
         this.rocketSound = new Audio("./sounds/rocketmovingnoise.mp3");
         this.rocketSound.loop = true;
@@ -33,7 +39,7 @@ class PlayerShip extends Entity {
         this.loseSound = new Audio("./sounds/losenoise.mp3");
         this.loseSound.volume = 0.5;
 
-        //Squid Ink
+        //Squid ink
         this.inked = false;
         this.inkTimer = 0;
         this.inkDuration = 10;
@@ -49,7 +55,7 @@ class PlayerShip extends Entity {
 
         this.inkSplats = [];
 
-        //Squid Attacks
+        //Squid attacks
         this.squidAttached = false;
         this.squidTimer = 0;
         this.squidDuration = 2.5; // seconds
@@ -77,6 +83,10 @@ class PlayerShip extends Entity {
         this.squidSpinSpeed = 6.0;   // radians/sec (tune)
         this.squidWiggleSpeed = 10;  // wiggles/sec (tune)
         this.squidWiggleAmp = 6;     // pixels (tune)
+
+        //Squid sounds
+        this.squidSound = new Audio("./sounds/squidsound.mp3");
+        this.squidSound.volume = 0.7;
 
         // Sprite setup
         this.setupSprite({
@@ -200,7 +210,7 @@ class PlayerShip extends Entity {
             }
         }
 
-        // invulnerability timer
+        // shield invulnerability timer
         if (this.invulnerable) {
             this.invulnTimer -= this.game.clockTick;
             if (this.invulnTimer <= 0) {
@@ -208,7 +218,7 @@ class PlayerShip extends Entity {
             }
         }
 
-        // knockback movement
+        // shield knockback movement
         if (this.knockbackX !== 0 || this.knockbackY !== 0) {
             this.x += this.knockbackX * this.game.clockTick;
             this.y += this.knockbackY * this.game.clockTick;
@@ -244,6 +254,9 @@ class PlayerShip extends Entity {
                         if (this.shieldActive) {
                             // shield absorbs hit
                             this.shieldActive = false;
+
+                            this.shieldBreakSound.currentTime = 0;
+                            this.shieldBreakSound.play().catch(() => {});
 
                             this.invulnerable = true;
                             this.invulnTimer = 1;
@@ -293,6 +306,8 @@ class PlayerShip extends Entity {
 
                     if (this.shieldActive) {
                         this.shieldActive = false;
+                        this.shieldBreakSound.currentTime = 0;
+                        this.shieldBreakSound.play().catch(() => {});
                         this.invulnerable = true;
                         this.invulnTimer = 1;
                         //console.log("Shield broke on wall!");
@@ -489,5 +504,7 @@ class PlayerShip extends Entity {
         }
         this.squidAttached = true;
         this.squidTimer = this.squidDuration;
+        this.squidSound.currentTime = 0;
+        this.squidSound.play().catch(() => {});
     }
 }

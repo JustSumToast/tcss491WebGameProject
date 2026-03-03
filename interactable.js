@@ -22,12 +22,14 @@ class Interactable extends Entity {
 
     if (this.type === "shield") {
       player.shieldActive = true;
-      console.log("Shield activated")
+      player.shieldAcquireSound.currentTime = 0;
+      player.shieldAcquireSound.play().catch(() => {});
+      //console.log("Shield activated")
     } 
 
     if (this.type === "squid") {
         player.applyInk();
-        console.log("squid deployed");
+        //console.log("squid deployed");
     }
   }
 
