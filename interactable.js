@@ -25,8 +25,9 @@ class Interactable extends Entity {
       console.log("Shield activated")
     } 
 
-    if (this.type === "bug") {
-        console.log("Bug deployed");
+    if (this.type === "squid") {
+        player.applyInk();
+        console.log("squid deployed");
     }
   }
 
@@ -59,8 +60,8 @@ class Interactable extends Entity {
         ctx.fill();
     }
 
-    // Bug
-    else if (this.type === "bug") {
+    // Squid
+    else if (this.type === "squid") {
 
         const flicker = 0.7 + Math.sin(this.time * 8 + Math.PI / 2) * 0.15;
 

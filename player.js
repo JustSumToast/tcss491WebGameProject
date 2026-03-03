@@ -11,13 +11,15 @@ class PlayerShip extends Entity {
         this.deceleration = 200;
         this.turnSpeed = 3;
         this.HP = 1;
+
+        //shield variables
         this.shieldActive = false;
-        this.prevX = this.x;
-        this.prevY = this.y;
+        this.prevX = this.x; //player colliding with walls
+        this.prevY = this.y; 
         this.invulnerable = false;
         this.invulnTimer = 0;
         this.knockbackX = 0;
-        this.knockbackY = 0;
+        this.knockbackY = 0; 
         this.time = 0; // for shield animation
         this.prevDir = null;
 
@@ -30,6 +32,51 @@ class PlayerShip extends Entity {
         // **Lose sound**
         this.loseSound = new Audio("./sounds/losenoise.mp3");
         this.loseSound.volume = 0.5;
+
+        //Squid Ink
+        this.inked = false;
+        this.inkTimer = 0;
+        this.inkDuration = 10;
+        this.inkSprite = new Image();
+        this.inkSprite.src = "./images/greenink.png";
+        this.inkFrameCount = 4;
+        this.inkFrames = [
+            { x: 0,   y: 0, w: 58, h: 56 },
+            { x: 61,  y: 1, w: 65, h: 76 },
+            { x: 128, y: 1, w: 40, h: 72 },
+            { x: 172, y: 1, w: 38, h: 76 }
+        ];
+
+        this.inkSplats = [];
+
+        //Squid Attacks
+        this.squidAttached = false;
+        this.squidTimer = 0;
+        this.squidDuration = 2.5; // seconds
+
+        this.squidSprite = new Image();
+        this.squidSprite.src = "./images/minecraftsquid.png";
+
+        this.squidFrames = [
+            { x: 9, y: 17, w: 50, h: 46 },
+            { x: 9, y: 80, w: 50, h: 48 },
+            { x: 9, y: 141, w: 50, h: 47 },
+            { x: 9, y: 201, w: 50, h: 53 },
+            { x: 9, y: 265, w: 50, h: 50 },
+            { x: 9, y: 329, w: 50, h: 49 },
+            { x: 9, y: 385, w: 50, h: 59 },
+            { x: 9, y: 452, w: 50, h: 64 },
+            { x: 9, y: 521, w: 50, h: 54 },
+            { x: 5, y: 589, w: 54, h: 50 }
+        ];
+
+        this.squidFrameIndex = 0;
+        this.squidFrameTimer = 0;
+        this.squidFrameSpeed = 0.08;
+        this.squidSpin = 0;          // current spin angle
+        this.squidSpinSpeed = 6.0;   // radians/sec (tune)
+        this.squidWiggleSpeed = 10;  // wiggles/sec (tune)
+        this.squidWiggleAmp = 6;     // pixels (tune)
 
         // Sprite setup
         this.setupSprite({
@@ -123,6 +170,35 @@ class PlayerShip extends Entity {
         this.y = Math.max(this.height / 2, Math.min(this.game.ctx.canvas.height - this.height / 2, this.y));
 
         this.updateBoundingCircle();
+
+        if (this.inked) {
+            this.inkTimer -= this.game.clockTick;
+
+            if (this.inkTimer <= 0) {
+                this.inked = false;
+            }
+        }
+
+        if (this.squidAttached) {
+
+            this.squidTimer -= dt;
+
+            // animate frames
+            this.squidFrameTimer += dt;
+            if (this.squidFrameTimer > this.squidFrameSpeed) {
+                this.squidFrameIndex++;
+                this.squidFrameIndex %= this.squidFrames.length;
+                this.squidFrameTimer = 0;
+            }
+
+            // spin
+            this.squidSpin += this.squidSpinSpeed * dt;
+
+            if (this.squidTimer <= 0) {
+                this.squidAttached = false;
+                this.squidSpin - 0;
+            }
+        }
 
         // invulnerability timer
         if (this.invulnerable) {
@@ -297,6 +373,67 @@ class PlayerShip extends Entity {
             ctx.lineTo(this.x + this.vx * 0.1, this.y + this.vy * 0.1);
             ctx.stroke();
         }
+
+        if (this.squidAttached) {
+            const frame = this.squidFrames[this.squidFrameIndex];
+
+            // wiggle offsets in ship-space
+            const wiggleX = Math.sin(this.time * this.squidWiggleSpeed) * this.squidWiggleAmp;
+            const wiggleY = Math.cos(this.time * (this.squidWiggleSpeed * 0.8)) * (this.squidWiggleAmp * 0.6);
+
+            ctx.save();
+            ctx.translate(this.x, this.y);
+            ctx.rotate(this.angle); // stick to ship orientation
+
+            // position squid slightly above the ship center + wiggle
+            ctx.translate(wiggleX, -10 + wiggleY);
+
+            // spin the squid itself (on top of ship rotation)
+            ctx.rotate(this.squidSpin);
+
+            ctx.drawImage(
+                this.squidSprite,
+                frame.x, frame.y, frame.w, frame.h,
+                -frame.w / 2, -frame.h / 2,
+                frame.w * 1.6, frame.h * 1.6
+            );
+
+            ctx.restore();
+        }
+
+        //Drawing Ink
+        ctx.save();
+        ctx.setTransform(1, 0, 0, 1, 0, 0); // reset transform
+
+        if (this.inked) {
+
+            const alpha = this.inkTimer / this.inkDuration;
+            ctx.globalAlpha = alpha;
+
+            for (let splat of this.inkSplats) {
+
+                const frame = this.inkFrames[splat.frame];
+
+                ctx.save();
+
+                ctx.translate(splat.x, splat.y);
+                ctx.rotate(splat.rotation);
+                ctx.scale(splat.scale, splat.scale);
+
+                ctx.drawImage(
+                    this.inkSprite,
+                    frame.x, frame.y,
+                    frame.w, frame.h,
+                    -frame.w / 2,
+                    -frame.h / 2,
+                    frame.w,
+                    frame.h
+                );
+
+                ctx.restore();
+            }
+        }
+        ctx.restore();
     }
 
     playRocketSound() {
@@ -331,5 +468,26 @@ class PlayerShip extends Entity {
         const dx = cx - closestX;
         const dy = cy - closestY;
         return dx * dx + dy * dy <= r * r;
+    }
+
+    applyInk() {
+        console.log("INK APPLIED");
+        this.inked = true;
+        this.inkTimer = this.inkDuration;
+        this.inkSplats = [];
+
+        const splatCount = 20;
+
+        for (let i = 0; i < splatCount; i++) {
+            this.inkSplats.push({
+                frame: Math.floor(Math.random() * this.inkFrames.length),
+                x: Math.random() * this.game.ctx.canvas.width,
+                y: Math.random() * this.game.ctx.canvas.height,
+                rotation: Math.random() * Math.PI * 2,
+                scale: 2.5 + Math.random() * 3
+            });
+        }
+        this.squidAttached = true;
+        this.squidTimer = this.squidDuration;
     }
 }
