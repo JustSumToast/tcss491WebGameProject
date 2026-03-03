@@ -54,10 +54,10 @@ const LEVEL_1 = {
 
     ],
 
-    interactables: [
-        {x:600, y: 600, type: "shield"},
-        {x:700, y: 600, type: "bug"}
-    ],
+    // interactables: [
+    //     {x:600, y: 600, type: "shield"},
+    //     {x:700, y: 600, type: "squid"}
+    // ],
 
     goal: { x: 725, y: 450, radius: 25},
 

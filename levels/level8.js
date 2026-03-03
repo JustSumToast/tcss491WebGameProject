@@ -21,6 +21,13 @@ LEVELS.level8 = {
         { x: 200, y: 600, width: 40, height: 200 }
     ],
 
+    interactables: [
+        {x:660, y: 200, type: "squid"},
+        {x:400, y: 700, type: "shield"},
+        {x:850, y: 750, type: "squid"},
+        {x:300, y: 500, type: "squid"}
+    ],
+
     goal: {
         x: 100, y: 500, radius: 30
     },

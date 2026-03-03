@@ -27,6 +27,12 @@ const LEVEL_2 = {
 
 
     ],
+
+    interactables: [
+        {x:800, y: 150, type: "shield"},
+        {x:200, y: 550, type: "shield"}
+    ],
+
     goal: { x: 810, y: 605, radius: 30 },
     playerStart: { x: 150, y: 165}
 };

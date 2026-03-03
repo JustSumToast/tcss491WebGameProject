@@ -66,6 +66,13 @@ const LEVEL_4 = {
         { x: 0, y: 500, width: 100, height: 1000 },
         { x: 1025, y: 500, width: 100, height: 1000 }
     ],
+
+    interactables: [
+        {x:200, y: 200, type: "squid"},
+        {x:350, y: 650, type: "squid"},
+        {x:670, y: 450, type: "squid"}
+    ],
+
     goal: { x: 512, y: 384, radius: 25 },
     playerStart: { x: 150, y: 150 },
 
