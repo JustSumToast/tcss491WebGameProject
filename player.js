@@ -12,6 +12,12 @@ class PlayerShip extends Entity {
         this.turnSpeed = 3;
         this.HP = 1;
         this.shieldActive = false;
+        this.prevX = this.x;
+        this.prevY = this.y;
+        this.invulnerable = false;
+        this.invulnTimer = 0;
+        this.knockbackX = 0;
+        this.knockbackY = 0;
         this.time = 0; // for shield animation
         this.prevDir = null;
 
@@ -45,6 +51,9 @@ class PlayerShip extends Entity {
             this.stopRocketSound();
             return;
         }
+        //save previous position
+        this.prevX = this.x;
+        this.prevY = this.y;
 
         // Input
         let accelerate = 0;
@@ -115,55 +124,135 @@ class PlayerShip extends Entity {
 
         this.updateBoundingCircle();
 
+        // invulnerability timer
+        if (this.invulnerable) {
+            this.invulnTimer -= this.game.clockTick;
+            if (this.invulnTimer <= 0) {
+                this.invulnerable = false;
+            }
+        }
+
+        // knockback movement
+        if (this.knockbackX !== 0 || this.knockbackY !== 0) {
+            this.x += this.knockbackX * this.game.clockTick;
+            this.y += this.knockbackY * this.game.clockTick;
+
+            this.knockbackX *= 0.9;
+            this.knockbackY *= 0.9;
+
+            if (Math.abs(this.knockbackX) < 1) this.knockbackX = 0;
+            if (Math.abs(this.knockbackY) < 1) this.knockbackY = 0;
+        }
+
         // Collisions
         for (let entity of this.game.entities) {
-            if (entity === this || !entity.boundingCircle) continue;
+            if (entity === this) continue;
 
             // Circle collision
-            if (this.boundingCircle.collide(entity.boundingCircle)) {
+            if (entity.boundingCircle &&
+        this.boundingCircle.collide(entity.boundingCircle)) {
                 if (entity instanceof EnemyShip || entity instanceof FireAsteroid || entity instanceof Sun) {
-                    this.HP -= 1;
-                    console.log("You collided with an enemy! HP:", this.HP);
-                    if (this.HP <= 0) {
-                        this.game.gameState = "lost";
-                        this.game.message = "YOU LOSE!";
-                        this.speed = 0;
-                        this.stopRocketSound();
+                    const dx = this.x - entity.x;
+                    const dy = this.y - entity.y;
+                    const mag = Math.sqrt(dx * dx + dy * dy) || 1;
+                    // immediate separation
+                    this.x += (dx / mag) * 10;
+                    this.y += (dy / mag) * 10;
 
-                        // Play lose sound
-                        this.loseSound.play().catch(() => {});
+                    // bounce velocity
+                    this.knockbackX = (dx / mag) * 300;
+                    this.knockbackY = (dy / mag) * 300;
 
-                        setTimeout(() => resetLevel(this.game), 2000);
-                        return;
+                    if (!this.invulnerable) {
+
+                        if (this.shieldActive) {
+                            // shield absorbs hit
+                            this.shieldActive = false;
+
+                            this.invulnerable = true;
+                            this.invulnTimer = 1;
+
+                            console.log("Shield broke!");
+                        }
+                        else {
+                            // normal damage
+                            this.HP -= 1;
+
+                            console.log("Player damaged! HP:", this.HP);
+
+                            if (this.HP <= 0) {
+                                this.game.gameState = "lost";
+                                this.game.message = "YOU LOSE!";
+                                this.speed = 0;
+                                this.stopRocketSound();
+                                this.loseSound.play().catch(() => {});
+                                setTimeout(() => resetLevel(this.game), 2000);
+                                return;
+                            }
+                        }
                     }
                 }
             }
+            // Wall collision
+            if (entity.boundingRect &&
+        this.circleRectCollide(this.boundingCircle, entity.boundingRect) &&
+        entity instanceof Wall) {
 
-            // Circle-rectangle collision
-            if (entity.boundingRect && this.circleRectCollide(this.boundingCircle, entity.boundingRect)) {
-                if (entity instanceof Wall) {
-                    this.HP -= 1;
-                    console.log("You collided with an obstacle! HP:", this.HP);
-                    if (this.HP <= 0) {
-                        this.game.gameState = "lost";
-                        this.game.message = "YOU LOSE!";
-                        this.speed = 0;
-                        this.stopRocketSound();
+                console.log("Wall collision detected");
 
-                        // Play lose sound
-                        this.loseSound.play().catch(() => {});
+                this.x = this.prevX;
+                this.y = this.prevY;
+                this.updateBoundingCircle();
 
-                        setTimeout(() => resetLevel(this.game), 2000);
-                        return;
+                // Stop forward movement
+                this.speed = 0;
+                this.vx = 0;
+                this.vy = 0;
+
+                // Apply bounce opposite facing direction
+                this.knockbackX = -Math.cos(this.angle) * 200;
+                this.knockbackY = -Math.sin(this.angle) * 200;
+
+                if (!this.invulnerable) {
+
+                    if (this.shieldActive) {
+                        this.shieldActive = false;
+                        this.invulnerable = true;
+                        this.invulnTimer = 1;
+                        //console.log("Shield broke on wall!");
+                    } else {
+                        this.HP -= 1;
+                        console.log("Hit wall! HP:", this.HP);
+
+                        if (this.HP <= 0) {
+                            this.game.gameState = "lost";
+                            this.game.message = "YOU LOSE!";
+                            this.speed = 0;
+                            this.stopRocketSound();
+                            this.loseSound.play().catch(() => {});
+                            setTimeout(() => resetLevel(this.game), 2000);
+                            return;
+                        }
                     }
                 }
             }
         }
     }
 
+
     draw(ctx) {
-        // Draw sprite: frame 0 = idle, frame 1 = moving
-        this.drawSprite(ctx, this.x, this.y, this.angle, this.isMoving ? 1 : 0);
+        let drawShip = true;
+
+        if (this.invulnerable) {
+            // Blink 10 times per second
+            const blink = Math.floor(this.time * 20) % 2;
+            drawShip = blink === 0;
+        }
+
+        if (drawShip) {
+            // Draw sprite: frame 0 = idle, frame 1 = moving
+            this.drawSprite(ctx, this.x, this.y, this.angle, this.isMoving ? 1 : 0);
+        }
 
         // Direction triangle
         ctx.fillStyle = "blue";
