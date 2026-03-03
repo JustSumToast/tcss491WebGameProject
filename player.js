@@ -11,6 +11,8 @@ class PlayerShip extends Entity {
         this.deceleration = 200;
         this.turnSpeed = 3;
         this.HP = 1;
+        this.shieldActive = false;
+        this.time = 0; // for shield animation
         this.prevDir = null;
 
         // Rocket moving sound
@@ -38,6 +40,7 @@ class PlayerShip extends Entity {
 
     update() {
         const dt = this.game.clockTick;
+        this.time += this.game.clockTick;
         if (this.game.gameState !== "playing") {
             this.stopRocketSound();
             return;
@@ -174,6 +177,27 @@ class PlayerShip extends Entity {
 
         // Draw bounding circle
         this.boundingCircle.draw(ctx);
+
+        if (this.shieldActive) {
+
+        const flicker = 0.85 + Math.sin(this.time * 6) * 0.1;
+
+        const glow = ctx.createRadialGradient(
+            this.x, this.y, this.radius,
+            this.x, this.y, this.radius * 2.2
+        );
+
+        glow.addColorStop(0, "rgba(0, 0, 255, 0)");
+        glow.addColorStop(0.5, `rgba(80, 160, 255, ${0.3 * flicker})`);
+        glow.addColorStop(1, `rgba(40, 120, 255, ${0.6 * flicker})`);
+
+        ctx.strokeStyle = glow;
+        ctx.lineWidth = 4;
+
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius * 1.8, 0, Math.PI * 2);
+        ctx.stroke();
+        }
 
         // Optional velocity vector
         if (this.game.options.debugging) {
