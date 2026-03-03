@@ -30,7 +30,8 @@ LEVELS.level5 = {
 
     interactables: [
         {x:450, y: 400, type: "squid"},
-        {x:600, y: 600, type: "shield"}
+        {x:600, y: 600, type: "shield"},
+        {x:700, y: 150, type: "poptart"}
     ],
 
     goal: {

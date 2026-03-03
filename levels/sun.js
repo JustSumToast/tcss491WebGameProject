@@ -19,7 +19,8 @@ const SUN_LEVEL = {
     interactables: [
         {x:500, y: 600, type: "shield"},
         {x:200, y: 400, type: "shield"},
-        {x:750, y: 250, type: "shield"}
+        {x:750, y: 250, type: "shield"},
+        {x:820, y: 384, type: "poptart"}
     ],
 
     onLoad: function(game) {

@@ -25,7 +25,8 @@ LEVELS.level8 = {
         {x:660, y: 200, type: "squid"},
         {x:400, y: 700, type: "shield"},
         {x:850, y: 750, type: "squid"},
-        {x:300, y: 500, type: "squid"}
+        {x:300, y: 500, type: "squid"},
+        {x:660, y: 500, type: "poptart"}
     ],
 
     goal: {

@@ -31,6 +31,20 @@ class Interactable extends Entity {
         player.applyInk();
         //console.log("squid deployed");
     }
+
+    if (this.type === "poptart") {
+      if (!this.collected) {  // prevents double counting
+        this.collected = true;
+
+        this.game.poptartsCollected += 1;
+
+        player.poptartSound.currentTime = 0;
+        player.poptartSound.play().catch(() => {});
+
+        console.log("Total poptarts:", this.game.poptartsCollected);
+      }
+      this.removeFromWorld = true;
+    }
   }
 
   draw(ctx) {
@@ -86,5 +100,35 @@ class Interactable extends Entity {
         ctx.arc(this.x, this.y, this.radius * 0.6, 0, Math.PI * 2);
         ctx.fill();
     }
+
+    //Poptart
+    else if (this.type === "poptart") {
+
+    if (!this.time) this.time = 0;
+    this.time += this.game.clockTick;
+
+    const flicker = 0.85 + Math.sin(this.time * 6) * 0.15;
+
+    const glow = ctx.createRadialGradient(
+        this.x, this.y, 0,
+        this.x, this.y, this.radius * 3
+    );
+
+    // Soft pink glow
+    glow.addColorStop(0, `rgba(255, 150, 200, ${0.6 * flicker})`);
+    glow.addColorStop(0.6, `rgba(255, 80, 160, ${0.3 * flicker})`);
+    glow.addColorStop(1, "rgba(255, 80, 160, 0)");
+
+    ctx.fillStyle = glow;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius * 3, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Bright pink core
+    ctx.fillStyle = "rgba(255, 180, 220, 0.9)";
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius * 0.6, 0, Math.PI * 2);
+    ctx.fill();
+}
   }
 }

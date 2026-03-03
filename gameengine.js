@@ -20,6 +20,9 @@ class GameEngine {
         this.timer = new Timer();
         this.elapsedTime = 0;
 
+        //poptart information
+        this.poptartsCollected = 0;
+
         // Options and the Details
         this.options = options || {
             debugging: false,
@@ -138,6 +141,19 @@ class GameEngine {
             canvas.width - 20,
             20
         );
+
+        // Poptart Counter
+        ctx.fillStyle = "#ff69b4";
+        ctx.font = "20px Arial";
+        ctx.textAlign = "right";
+        ctx.textBaseline = "top";
+
+        ctx.fillText(
+            `Poptarts: ${this.poptartsCollected}`,
+            canvas.width - 20,
+            50
+        );
+
 
         ctx.restore();
     };

@@ -70,7 +70,8 @@ const LEVEL_4 = {
     interactables: [
         {x:200, y: 200, type: "squid"},
         {x:350, y: 650, type: "squid"},
-        {x:670, y: 450, type: "squid"}
+        {x:670, y: 450, type: "squid"},
+        {x:300, y: 400, type: "poptart"}
     ],
 
     goal: { x: 512, y: 384, radius: 25 },

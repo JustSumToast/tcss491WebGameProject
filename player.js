@@ -88,6 +88,10 @@ class PlayerShip extends Entity {
         this.squidSound = new Audio("./sounds/squidsound.mp3");
         this.squidSound.volume = 0.7;
 
+        // Poptart sound
+        this.poptartSound = new Audio("./sounds/poptartsound.mp3");
+        this.poptartSound.volume = 0.7;
+
         // Sprite setup
         this.setupSprite({
             path: "./images/playership.png",

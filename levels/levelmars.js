@@ -19,7 +19,8 @@ const LEVEL_MARS = {
     interactables: [
         {x:450, y: 400, type: "squid"},
         {x:250, y: 600, type: "squid"},
-        {x:400, y: 100, type: "shield"}
+        {x:400, y: 100, type: "shield"},
+        {x:800, y: 350, type: "poptart"}
     ],
     goal: { x: 896, y: 640, radius: 30 },
     playerStart: { x: 128, y: 128 },

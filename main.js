@@ -27,6 +27,10 @@ function loadLevel(levelName) {
     if (!levelConfig) return console.error(`Level ${levelName} not found`);
 
     gameEngine.currentLevel = levelName;
+    //reset poptart count at level 1
+    if (levelName === "level1") {
+        gameEngine.poptartsCollected = 0;
+    }
 
     levelConfig.enemies.forEach(enemyData => {
         const enemy = new EnemyShip(gameEngine, enemyData.x, enemyData.y, enemyData.angle, enemyData.spriteConfig || null);
