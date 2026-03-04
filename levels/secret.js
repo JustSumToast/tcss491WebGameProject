@@ -20,18 +20,55 @@ class SecretTimer {
             this.removeFromWorld = true;
             setTimeout(() => {
                 nextLevel();
-            }, 2000);
+            }, 5000);
                 
         }
     }
 
     draw(ctx) {
-        ctx.fillStyle = "white";
-        ctx.font = "30px Arial";
+        // ctx.fillStyle = "white";
+        // ctx.font = "30px Arial";
 
-        const time = Math.ceil(this.timeLeft);
-        ctx.fillText("Survive: " + time, 10, 80);
+        // const time = Math.ceil(this.timeLeft);
+        // ctx.fillText("Survive: " + time, 10, 80);
     }
+}
+
+class PoptartSpawner {
+    constructor(game) {
+        this.game = game;
+        this.spawnTimer = 0;
+        this.spawnInterval = 0.5; // seconds
+    }
+
+    update() {
+
+        if (this.game.gameState !== "playing") return;
+
+        this.spawnTimer += this.game.clockTick;
+
+        if (this.spawnTimer >= this.spawnInterval) {
+
+            this.spawnTimer = 0;
+
+            const canvas = this.game.ctx.canvas;
+
+            for (let i = 0; i < 2; i++) {
+
+                const x = Math.random() * this.game.ctx.canvas.width;
+                const y = Math.random() * this.game.ctx.canvas.height;
+
+                const poptart = new Interactable(this.game, x, y, "poptart");
+
+                this.game.addEntity(poptart);
+            }
+            
+        }
+
+        if (this.game.gameState === "win") return;
+    }
+
+    draw(ctx) {}
 }
 
 const SECRET_LEVEL = {
@@ -47,7 +84,9 @@ const SECRET_LEVEL = {
         game.poptartCount = 0;
         const cat = new CatEntity(game, 500, 300);
         game.addEntity(cat);
-        game.addEntity(new SecretTimer(game, 5)); //seconds survival
+        game.addEntity(new SecretTimer(game, 30));
+        game.addEntity(new PoptartSpawner(game));
+        const player = game.entities.find(e => e.constructor.name === "Player");
     }
 };
 

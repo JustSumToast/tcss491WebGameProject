@@ -99,8 +99,6 @@ function nextLevel() {
     const levelNames = Object.keys(LEVELS);
     const currentIndex = levelNames.indexOf(gameEngine.currentLevel);
     const nextIndex = currentIndex + 1;
-    
-
     if (levelNames[nextIndex] === "secret") {
         if (gameEngine.poptartCount === levelNames.length - 1) {
             gameEngine.currentLevel = "secret"
