@@ -280,6 +280,7 @@ class PlayerShip extends Entity {
                                 this.stopRocketSound();
                                 this.loseSound.play().catch(() => {});
                                 setTimeout(() => resetLevel(this.game), 2000);
+                                gameEngine.poptartCount = gameEngine.prevPopCount;
                                 return;
                             }
                         }
@@ -326,6 +327,7 @@ class PlayerShip extends Entity {
                             this.stopRocketSound();
                             this.loseSound.play().catch(() => {});
                             setTimeout(() => resetLevel(this.game), 2000);
+                            setTimeout(() => gameEngine.poptartCount = gameEngine.prevPopCount, 1999);
                             return;
                         }
                     }

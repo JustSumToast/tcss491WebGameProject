@@ -33,16 +33,10 @@ class Interactable extends Entity {
     }
 
     if (this.type === "poptart") {
-      if (!this.collected) {  // prevents double counting
-        this.collected = true;
-
-        this.game.poptartsCollected += 1;
-
-        player.poptartSound.currentTime = 0;
-        player.poptartSound.play().catch(() => {});
-
-        console.log("Total poptarts:", this.game.poptartsCollected);
-      }
+      this.game.poptartCount += 1;
+      player.poptartSound.currentTime = 0;
+      player.poptartSound.play().catch(() => {});
+      //console.log("Total poptarts:", this.game.poptartCount);
       this.removeFromWorld = true;
     }
   }

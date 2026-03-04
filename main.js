@@ -32,6 +32,9 @@ function loadLevel(levelName) {
         gameEngine.poptartsCollected = 0;
     }
 
+    gameEngine.prevPopCount = gameEngine.poptartCount;
+    
+
     levelConfig.enemies.forEach(enemyData => {
         const enemy = new EnemyShip(gameEngine, enemyData.x, enemyData.y, enemyData.angle, enemyData.spriteConfig || null);
         gameEngine.addEntity(enemy);
@@ -95,12 +98,34 @@ function nextLevel() {
     const levelNames = Object.keys(LEVELS);
     const currentIndex = levelNames.indexOf(gameEngine.currentLevel);
     const nextIndex = currentIndex + 1;
+    
 
-    if (nextIndex >= levelNames.length) {
+    if (levelNames[nextIndex] === "secret") {
+        if (gameEngine.poptartCount === levelNames.length - 1) {
+            gameEngine.currentLevel = "secret"
+            resetLevel(gameEngine);
+            return;
+        } else {
+            gameEngine.entities = [];
+            gameEngine.gameState = "menu";
+            gameEngine.message = "";
+            gameEngine.currentLevel = null;
+            gameEngine.poptartCount = 0;
+            gameEngine.elapsedTime = 0;
+
+            const menuBackground = new Background(gameEngine);
+            gameEngine.addEntity(menuBackground);
+        }
+    }
+
+    if (nextIndex >= levelNames.length - 1) {
         gameEngine.entities = [];
         gameEngine.gameState = "menu";
         gameEngine.message = "";
         gameEngine.currentLevel = null;
+        gameEngine.currentLevel = null;
+        gameEngine.poptartCount = 0;
+        gameEngine.elapsedTime = 0;
 
         const menuBackground = new Background(gameEngine);
         gameEngine.addEntity(menuBackground);
@@ -108,6 +133,7 @@ function nextLevel() {
         document.getElementById("gameMenu").style.display = "block";
         return;
     }
+    
 
     gameEngine.currentLevel = levelNames[nextIndex];
     resetLevel(gameEngine);
