@@ -41,11 +41,12 @@ const SECRET_LEVEL = {
     interactables: [],
 
     goal: null,
-    playerStart: {x: 500, y: 400},
+    playerStart: {x: 500, y: 600},
 
     onLoad: function(game) {
         game.poptartCount = 0;
-
+        const cat = new CatEntity(game, 500, 300);
+        game.addEntity(cat);
         game.addEntity(new SecretTimer(game, 5)); //seconds survival
     }
 };

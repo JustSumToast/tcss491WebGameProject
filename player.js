@@ -237,7 +237,6 @@ class PlayerShip extends Entity {
         // Collisions
         for (let entity of this.game.entities) {
             if (entity === this) continue;
-
             // Circle collision
             if (entity.boundingCircle &&
         this.boundingCircle.collide(entity.boundingCircle)) {
@@ -285,6 +284,11 @@ class PlayerShip extends Entity {
                             }
                         }
                     }
+                }
+                if (entity.constructor.name === "CatEntity") {
+                    console.log("hit cat");
+                    this.bounceOffCat(entity);
+                    
                 }
             }
             // Wall collision
@@ -512,5 +516,24 @@ class PlayerShip extends Entity {
         this.squidTimer = this.squidDuration;
         this.squidSound.currentTime = 0;
         this.squidSound.play().catch(() => {});
+    }
+
+    bounceOffCat(cat) {
+
+        const dx = this.x - cat.x;
+        const dy = this.y - cat.y;
+
+        const mag = Math.sqrt(dx * dx + dy * dy) || 1;
+
+        const nx = dx / mag;
+        const ny = dy / mag;
+
+        // push player outside the cat
+        this.x += nx * 25;
+        this.y += ny * 25;
+
+        // apply knockback
+        this.knockbackX = nx * 400;
+        this.knockbackY = ny * 400;
     }
 }

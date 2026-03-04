@@ -14,6 +14,7 @@ ASSET_MANAGER.queueDownload("./images/spacewalltexture.jpg");
 ASSET_MANAGER.queueDownload("./images/sun.png");
 ASSET_MANAGER.queueDownload("./images/fireball1.png");
 ASSET_MANAGER.queueDownload("./images/enemyShipD1.png");
+ASSET_MANAGER.queueDownload("./images/nyan_cat.png");
 
 // track game state
 gameEngine.gameState = "menu"; // "menu", "playing", "won", "lost"
