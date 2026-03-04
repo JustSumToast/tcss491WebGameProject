@@ -20,6 +20,10 @@ class GameEngine {
         this.timer = new Timer();
         this.elapsedTime = 0;
 
+        //poptart information
+        this.prevPopCount = 0;
+        this.poptartCount = 0;
+
         // Options and the Details
         this.options = options || {
             debugging: false,
@@ -114,7 +118,12 @@ class GameEngine {
         // === Win / Lose message ===
         if (this.gameState !== "playing") {
             ctx.save();
-            ctx.fillStyle = this.gameState === "won" ? "yellow" : "red";
+            ctx.fillStyle =
+                this.currentLevel === "secret" && this.gameState === "won"
+                ? "pink"
+                : this.gameState === "won"
+                ? "yellow"
+                : "red";
             ctx.font = "48px Arial";
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
@@ -138,6 +147,19 @@ class GameEngine {
             canvas.width - 20,
             20
         );
+
+        // // Poptart Counter
+        // ctx.fillStyle = "#ff69b4";
+        // ctx.font = "20px Arial";
+        // ctx.textAlign = "right";
+        // ctx.textBaseline = "top";
+
+        // ctx.fillText(
+        //     `Poptarts: ${this.poptartCount}`,
+        //     canvas.width - 20,
+        //     50
+        // );
+
 
         ctx.restore();
     };

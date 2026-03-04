@@ -14,6 +14,7 @@ ASSET_MANAGER.queueDownload("./images/spacewalltexture.jpg");
 ASSET_MANAGER.queueDownload("./images/sun.png");
 ASSET_MANAGER.queueDownload("./images/fireball1.png");
 ASSET_MANAGER.queueDownload("./images/enemyShipD1.png");
+ASSET_MANAGER.queueDownload("./images/nyan_cat.png");
 
 // track game state
 gameEngine.gameState = "menu"; // "menu", "playing", "won", "lost"
@@ -27,6 +28,13 @@ function loadLevel(levelName) {
     if (!levelConfig) return console.error(`Level ${levelName} not found`);
 
     gameEngine.currentLevel = levelName;
+    //reset poptart count at level 1
+    if (levelName === "level1") {
+        gameEngine.poptartsCollected = 0;
+    }
+
+    gameEngine.prevPopCount = gameEngine.poptartCount;
+    
 
     levelConfig.enemies.forEach(enemyData => {
         const enemy = new EnemyShip(gameEngine, enemyData.x, enemyData.y, enemyData.angle, enemyData.spriteConfig || null);
@@ -91,12 +99,32 @@ function nextLevel() {
     const levelNames = Object.keys(LEVELS);
     const currentIndex = levelNames.indexOf(gameEngine.currentLevel);
     const nextIndex = currentIndex + 1;
+    if (levelNames[nextIndex] === "secret") {
+        if (gameEngine.poptartCount === levelNames.length - 1) {
+            gameEngine.currentLevel = "secret"
+            resetLevel(gameEngine);
+            return;
+        } else {
+            gameEngine.entities = [];
+            gameEngine.gameState = "menu";
+            gameEngine.message = "";
+            gameEngine.currentLevel = null;
+            gameEngine.poptartCount = 0;
+            gameEngine.elapsedTime = 0;
 
-    if (nextIndex >= levelNames.length) {
+            const menuBackground = new Background(gameEngine);
+            gameEngine.addEntity(menuBackground);
+        }
+    }
+
+    if (nextIndex >= levelNames.length - 1) {
         gameEngine.entities = [];
         gameEngine.gameState = "menu";
         gameEngine.message = "";
         gameEngine.currentLevel = null;
+        gameEngine.currentLevel = null;
+        gameEngine.poptartCount = 0;
+        gameEngine.elapsedTime = 0;
 
         const menuBackground = new Background(gameEngine);
         gameEngine.addEntity(menuBackground);
@@ -104,6 +132,7 @@ function nextLevel() {
         document.getElementById("gameMenu").style.display = "block";
         return;
     }
+    
 
     gameEngine.currentLevel = levelNames[nextIndex];
     resetLevel(gameEngine);

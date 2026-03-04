@@ -88,6 +88,10 @@ class PlayerShip extends Entity {
         this.squidSound = new Audio("./sounds/squidsound.mp3");
         this.squidSound.volume = 0.7;
 
+        // Poptart sound
+        this.poptartSound = new Audio("./sounds/poptartsound.mp3");
+        this.poptartSound.volume = 0.7;
+
         // Sprite setup
         this.setupSprite({
             path: "./images/playership.png",
@@ -233,7 +237,6 @@ class PlayerShip extends Entity {
         // Collisions
         for (let entity of this.game.entities) {
             if (entity === this) continue;
-
             // Circle collision
             if (entity.boundingCircle &&
         this.boundingCircle.collide(entity.boundingCircle)) {
@@ -276,10 +279,16 @@ class PlayerShip extends Entity {
                                 this.stopRocketSound();
                                 this.loseSound.play().catch(() => {});
                                 setTimeout(() => resetLevel(this.game), 2000);
+                                gameEngine.poptartCount = gameEngine.prevPopCount;
                                 return;
                             }
                         }
                     }
+                }
+                if (entity.constructor.name === "CatEntity") {
+                    console.log("hit cat");
+                    this.bounceOffCat(entity);
+                    
                 }
             }
             // Wall collision
@@ -322,6 +331,7 @@ class PlayerShip extends Entity {
                             this.stopRocketSound();
                             this.loseSound.play().catch(() => {});
                             setTimeout(() => resetLevel(this.game), 2000);
+                            setTimeout(() => gameEngine.poptartCount = gameEngine.prevPopCount, 1999);
                             return;
                         }
                     }
@@ -506,5 +516,24 @@ class PlayerShip extends Entity {
         this.squidTimer = this.squidDuration;
         this.squidSound.currentTime = 0;
         this.squidSound.play().catch(() => {});
+    }
+
+    bounceOffCat(cat) {
+
+        const dx = this.x - cat.x;
+        const dy = this.y - cat.y;
+
+        const mag = Math.sqrt(dx * dx + dy * dy) || 1;
+
+        const nx = dx / mag;
+        const ny = dy / mag;
+
+        // push player outside the cat
+        this.x += nx * 25;
+        this.y += ny * 25;
+
+        // apply knockback
+        this.knockbackX = nx * 400;
+        this.knockbackY = ny * 400;
     }
 }

@@ -54,14 +54,13 @@ const LEVEL_1 = {
 
     ],
 
-    // interactables: [
-    //     {x:600, y: 600, type: "shield"},
-    //     {x:700, y: 600, type: "squid"}
-    // ],
+    interactables: [
+        {x:725, y: 600, type: "poptart"}
+    ],
 
     goal: { x: 725, y: 450, radius: 25},
 
-    playerStart: { x: 500, y: 650 }
+    playerStart: { x: 300, y: 650 }
 };
 
 // Register to global LEVELS object
