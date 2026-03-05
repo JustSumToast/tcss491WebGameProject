@@ -5,6 +5,18 @@ if (typeof LEVELS === 'undefined') window.LEVELS = {};
 const gameEngine = new GameEngine({ debugging: false });
 const ASSET_MANAGER = new AssetManager();
 
+// audio for game (moved global so menu can control it)
+const menuMusic = new Audio('./sounds/titlemenu.ogg');
+menuMusic.loop = true;
+menuMusic.volume = 0.4;
+
+const level1Music = new Audio('./sounds/level1.ogg');
+level1Music.loop = true;
+level1Music.volume = 0.5;
+
+const menuHoverSound = new Audio('./sounds/menubutton.mp3');
+menuHoverSound.volume = 0.5;
+
 // load assets
 ASSET_MANAGER.queueDownload("./images/playership.png");
 ASSET_MANAGER.queueDownload("./images/blackhole.png");
@@ -21,6 +33,28 @@ gameEngine.gameState = "menu"; // "menu", "playing", "won", "lost"
 gameEngine.message = "";
 gameEngine.elapsedTime = 0;
 
+// return to menu
+function returnToMenu() {
+    gameEngine.entities = [];
+    gameEngine.gameState = "menu";
+    gameEngine.currentLevel = null;
+    gameEngine.message = "";
+    gameEngine.elapsedTime = 0;
+    gameEngine.poptartCount = 0;
+
+    // stop level music
+    level1Music.pause();
+    level1Music.currentTime = 0;
+
+    // restart menu music
+    menuMusic.play().catch(e => console.log("Menu music blocked:", e));
+
+    document.getElementById("gameMenu").style.display = "block";
+
+    const menuBackground = new Background(gameEngine);
+    gameEngine.addEntity(menuBackground);
+}
+
 // load level enemies, walls, goal
 function loadLevel(levelName) {
     const levelConfig = LEVELS[levelName];
@@ -28,13 +62,13 @@ function loadLevel(levelName) {
     if (!levelConfig) return console.error(`Level ${levelName} not found`);
 
     gameEngine.currentLevel = levelName;
+
     //reset poptart count at level 1
     if (levelName === "level1") {
         gameEngine.poptartsCollected = 0;
     }
 
     gameEngine.prevPopCount = gameEngine.poptartCount;
-    
 
     levelConfig.enemies.forEach(enemyData => {
         const enemy = new EnemyShip(gameEngine, enemyData.x, enemyData.y, enemyData.angle, enemyData.spriteConfig || null);
@@ -54,6 +88,7 @@ function loadLevel(levelName) {
             gameEngine.addEntity(new Interactable(gameEngine, data.x, data.y, data.type));
         });
     }
+
     if (levelConfig.goal) {
         const g = levelConfig.goal;
         gameEngine.addEntity(new GoalCircle(gameEngine, g.x, g.y, g.radius));
@@ -99,40 +134,22 @@ function nextLevel() {
     const levelNames = Object.keys(LEVELS);
     const currentIndex = levelNames.indexOf(gameEngine.currentLevel);
     const nextIndex = currentIndex + 1;
+
     if (levelNames[nextIndex] === "secret") {
         if (gameEngine.poptartCount === levelNames.length - 1) {
-            gameEngine.currentLevel = "secret"
+            gameEngine.currentLevel = "secret";
             resetLevel(gameEngine);
             return;
         } else {
-            gameEngine.entities = [];
-            gameEngine.gameState = "menu";
-            gameEngine.message = "";
-            gameEngine.currentLevel = null;
-            gameEngine.poptartCount = 0;
-            gameEngine.elapsedTime = 0;
-
-            const menuBackground = new Background(gameEngine);
-            gameEngine.addEntity(menuBackground);
+            returnToMenu();
+            return;
         }
     }
 
     if (nextIndex >= levelNames.length - 1) {
-        gameEngine.entities = [];
-        gameEngine.gameState = "menu";
-        gameEngine.message = "";
-        gameEngine.currentLevel = null;
-        gameEngine.currentLevel = null;
-        gameEngine.poptartCount = 0;
-        gameEngine.elapsedTime = 0;
-
-        const menuBackground = new Background(gameEngine);
-        gameEngine.addEntity(menuBackground);
-
-        document.getElementById("gameMenu").style.display = "block";
+        returnToMenu();
         return;
     }
-    
 
     gameEngine.currentLevel = levelNames[nextIndex];
     resetLevel(gameEngine);
@@ -140,6 +157,13 @@ function nextLevel() {
 
 // menu start level
 function startLevel(levelName) {
+    menuMusic.pause();
+    menuMusic.currentTime = 0;
+
+    if (levelName === 'level1') {
+        level1Music.play().catch(e => console.log("Level1 music blocked:", e));
+    }
+
     gameEngine.currentLevel = levelName;
     resetLevel(gameEngine);
     gameEngine.gameState = "playing";
@@ -166,19 +190,6 @@ ASSET_MANAGER.downloadAll(() => {
     const menuBackground = new Background(gameEngine);
     gameEngine.addEntity(menuBackground);
 
-    // audio for game
-    const menuMusic = new Audio('./sounds/titlemenu.ogg');
-    menuMusic.loop = true;
-    menuMusic.volume = 0.4;
-
-    const level1Music = new Audio('./sounds/level1.ogg');
-    level1Music.loop = true;
-    level1Music.volume = 0.5;
-
-    // hover sound effect
-    const menuHoverSound = new Audio('./sounds/menubutton.mp3');
-    menuHoverSound.volume = 0.5;
-
     let menuMusicStarted = false;
 
     function startMenuMusic() {
@@ -192,24 +203,6 @@ ASSET_MANAGER.downloadAll(() => {
 
     window.addEventListener('click', startMenuMusic);
     window.addEventListener('keydown', startMenuMusic);
-
-    const originalStartLevel = window.startLevel;
-    window.startLevel = function(levelName) {
-
-        if (!menuMusicStarted) {
-            menuMusic.play().catch(e => console.log("Menu music blocked on start:", e));
-            menuMusicStarted = true;
-        }
-
-        menuMusic.pause();
-        menuMusic.currentTime = 0;
-
-        if (levelName === 'level1') {
-            level1Music.play().catch(e => console.log("Level1 music blocked:", e));
-        }
-
-        originalStartLevel(levelName);
-    };
 
     // center menu
     const menu = document.getElementById("gameMenu");

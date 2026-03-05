@@ -110,7 +110,7 @@ class GameEngine {
         ctx.font = "16px TimesNewRoman";
 
         ctx.fillStyle = "lime";
-        ctx.fillText("Goal: Park your ship inside the blue circle without hitting enemies or walls.", 10, 20);
+        ctx.fillText("Goal: Park your ship inside the parking space without hitting enemies or walls.", 10, 20);
 
         ctx.fillStyle = "yellow";
         ctx.fillText("Controls: W/S - Accelerate/Reverse | A/D - Turn Left/Right", 10, 40);
