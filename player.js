@@ -296,7 +296,7 @@ class PlayerShip extends Entity {
         this.circleRectCollide(this.boundingCircle, entity.boundingRect) &&
         entity instanceof Wall) {
 
-                console.log("Wall collision detected");
+                //console.log("Wall collision detected");
 
                 this.x = this.prevX;
                 this.y = this.prevY;
@@ -305,21 +305,23 @@ class PlayerShip extends Entity {
                 const dx = this.x - entity.x;
                 const dy = this.y - entity.y;
 
-
                 const mag = Math.sqrt(dx * dx + dy * dy) || 1;
 
-                // push player out of collision immediately
-                this.x += (dx / mag) * 10;
-                this.y += (dy / mag) * 10;
+                const push = 6;
 
-                // stop current movement
+                // push player out of collision
+                this.x += (dx / mag) * push;
+                this.y += (dy / mag) * push;
+
+                this.updateBoundingCircle();
+
+                // stop movement
                 this.vx = 0;
                 this.vy = 0;
 
-                // apply bounce
+                // knockback
                 this.knockbackX = (dx / mag) * 300;
                 this.knockbackY = (dy / mag) * 300;
-
 
 
                 if (!this.invulnerable) {
