@@ -2,14 +2,14 @@ LEVELS.level5 = {
     playerStart: { x: 300, y: 100 },
 
     enemies: [
-        { x: 900, y: 650, angle: VERTICAL_ANGLE,},
-        { x: 100, y: 650},
-        { x: 950, y: 400, angle: VERTICAL_ANGLE,},
-        { x: 500, y: 200},
-        { x: 500, y: 730, angle: 200,},
-        { x: 320, y: 300, angle: VERTICAL_ANGLE,},
-        { x: 320, y: 500, angle: VERTICAL_ANGLE,}
-        
+        { x: 900, y: 650, angle: VERTICAL_ANGLE, spriteConfig: ENEMY_SHIP3 },
+        { x: 100, y: 650,                        spriteConfig: ENEMY_SHIP5 },
+        { x: 950, y: 400, angle: VERTICAL_ANGLE, spriteConfig: ENEMY_SHIP2 },
+        { x: 500, y: 200,                        spriteConfig: ENEMY_SHIP2 },
+        { x: 500, y: 730, angle: 200,            spriteConfig: ENEMY_SHIP4 },
+        { x: 320, y: 300, angle: VERTICAL_ANGLE, spriteConfig: ENEMY_SHIP5 },
+        { x: 320, y: 500, angle: VERTICAL_ANGLE, spriteConfig: ENEMY_SHIP3 }
+
     ],
 
     walls: [

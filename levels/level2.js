@@ -4,10 +4,10 @@ const LEVEL_2_VERTICAL_ANGLE = Math.PI / 2;
 const LEVEL_2 = {
     name: 'level2',
     enemies: [
-        { x: 400, y: 100, angle: VERTICAL_ANGLE},
-        { x: 600, y: 100, angle: VERTICAL_ANGLE},
-        { x: 700, y: 250, angle: VERTICAL_ANGLE},
-        { x: 400, y: 500, angle: VERTICAL_ANGLE},
+        { x: 400, y: 100, angle: VERTICAL_ANGLE, spriteConfig: ENEMY_SHIP3 },
+        { x: 600, y: 100, angle: VERTICAL_ANGLE, spriteConfig: ENEMY_SHIP5 },
+        { x: 700, y: 250, angle: VERTICAL_ANGLE, spriteConfig: ENEMY_SHIP2 },
+        { x: 400, y: 500, angle: VERTICAL_ANGLE, spriteConfig: ENEMY_SHIP4 },
 
     ],
     walls: [

@@ -38,20 +38,21 @@ class Blackhole {
 // orbitSpeed: radians per second (positive = clockwise, negative = counter-clockwise)
 // startAngle: starting angle in radians (0 = right, PI/2 = bottom, PI = left, 3PI/2 = top)
 class OrbitingEnemy extends EnemyShip {
-    constructor(game, centerX, centerY, orbitDistance, orbitSpeed, startAngle = 0) {
-        super(game, centerX + orbitDistance, centerY, 0);
+    constructor(game, centerX, centerY, orbitDistance, orbitSpeed, startAngle = 0, spriteConfig = null, angleOffset = 0) {
+        super(game, centerX + orbitDistance, centerY, 0, spriteConfig);
         this.centerX = centerX;
         this.centerY = centerY;
         this.orbitDistance = orbitDistance;
         this.orbitSpeed = orbitSpeed;
         this.orbitAngle = startAngle;
+        this.angleOffset = angleOffset;
     }
 
     update() {
         this.orbitAngle += this.orbitSpeed * this.game.clockTick;
         this.x = this.centerX + Math.cos(this.orbitAngle) * this.orbitDistance;
         this.y = this.centerY + Math.sin(this.orbitAngle) * this.orbitDistance;
-        this.angle = this.orbitAngle + Math.PI / 2; // face direction of movement
+        this.angle = this.orbitAngle + Math.PI / 2 + this.angleOffset; // face direction of movement
         super.update();
     }
 }
@@ -81,17 +82,17 @@ const LEVEL_4 = {
         // add blackhole at center
         game.addEntity(new Blackhole(game, LEVEL_4_CENTER_X, LEVEL_4_CENTER_Y, 240));
 
-        // first enemy - clockwise, distance x2, speed 1, start at right
+        // first enemy - clockwise, distance x2, speed 3, start at right
         const orbitDistance1 = LEVEL_4_BLACKHOLE_RADIUS + (LEVEL_4_ENEMY_RADIUS * 2);
-        game.addEntity(new OrbitingEnemy(game, LEVEL_4_CENTER_X, LEVEL_4_CENTER_Y, orbitDistance1, 1, 0));
+        game.addEntity(new OrbitingEnemy(game, LEVEL_4_CENTER_X, LEVEL_4_CENTER_Y, orbitDistance1, 3, 0, ENEMY_SHIP5));
 
         // second enemy - counter-clockwise, distance x5, speed 1.5, start at left
         const orbitDistance2 = LEVEL_4_BLACKHOLE_RADIUS + (LEVEL_4_ENEMY_RADIUS * 5);
-        game.addEntity(new OrbitingEnemy(game, LEVEL_4_CENTER_X, LEVEL_4_CENTER_Y, orbitDistance2, -1.5, Math.PI));
+        game.addEntity(new OrbitingEnemy(game, LEVEL_4_CENTER_X, LEVEL_4_CENTER_Y, orbitDistance2, -1.5, Math.PI, ENEMY_SHIP5, Math.PI));
 
         // second enemy - clockwise, distance x8 speed 2, start at vertical position
         const orbitDistance3 = LEVEL_4_BLACKHOLE_RADIUS + (LEVEL_4_ENEMY_RADIUS * 8);
-        game.addEntity(new OrbitingEnemy(game, LEVEL_4_CENTER_X, LEVEL_4_CENTER_Y, orbitDistance3, 2, 3*Math.PI/2));
+        game.addEntity(new OrbitingEnemy(game, LEVEL_4_CENTER_X, LEVEL_4_CENTER_Y, orbitDistance3, 2, 3*Math.PI/2, ENEMY_SHIP5));
     }
 };
 

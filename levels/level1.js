@@ -8,36 +8,34 @@ const GAP_1X = SLOT_WIDTH + BUFFER_SPACE + SLOT_WIDTH;
 const GAP_2X = SLOT_WIDTH + (BUFFER_SPACE + SLOT_WIDTH * 2);
 const GAP_3X = SLOT_WIDTH + (BUFFER_SPACE + SLOT_WIDTH * 3);
 
-const ENEMY_D1 = { path: "./images/enemyShipD1.png", frameWidth: 632, frameHeight: 395, frameCount: 1, scale: 0.2 };
-
 const LEVEL_1 = {
     name: 'level1',
     enemies: [
         // top row
-        { x: 200, y: 150, angle: VERTICAL_ANGLE},
-        { x: 200 + GAP_1X, y: 150, angle: HORIZONTAL_ANGLE, spriteConfig: ENEMY_D1},
-        { x: 200 + GAP_1X * 2, y: 150, angle: VERTICAL_ANGLE},
-        { x: 200 + GAP_1X * 3, y: 150, angle: HORIZONTAL_ANGLE, spriteConfig: ENEMY_D1},
-        { x: 200 + GAP_1X * 4, y: 150, angle: VERTICAL_ANGLE},
-        { x: 200 + GAP_1X * 5, y: 150, angle: HORIZONTAL_ANGLE, spriteConfig: ENEMY_D1},
-        { x: 200 + GAP_1X * 6, y: 150, angle: VERTICAL_ANGLE},
+        { x: 200,             y: 150, angle: VERTICAL_ANGLE,      spriteConfig: ENEMY_SHIP5 },
+        { x: 200 + GAP_1X,   y: 150, angle: 3 * Math.PI / 2,      spriteConfig: ENEMY_SHIP2 },
+        { x: 200 + GAP_1X*2, y: 150, angle: Math.PI / 2,      spriteConfig: ENEMY_SHIP4 },
+        { x: 200 + GAP_1X*3, y: 150, angle: 3 * Math.PI / 2,     spriteConfig: ENEMY_SHIP3 },
+        { x: 200 + GAP_1X*4, y: 150, angle: 3 * Math.PI / 2,      spriteConfig: ENEMY_D1 },
+        { x: 200 + GAP_1X*5, y: 150, angle: Math.PI / 2,         spriteConfig: ENEMY_SHIP4 },
+        { x: 200 + GAP_1X*6, y: 150, angle: VERTICAL_ANGLE,      spriteConfig: ENEMY_SHIP5 },
 
         // middle row
-        { x: 200, y: 300, angle: HORIZONTAL_ANGLE, spriteConfig: ENEMY_D1},
-        { x: 200 + GAP_1X, y: 300, angle: VERTICAL_ANGLE},
-        { x: 200 + GAP_1X * 2, y: 300, angle: HORIZONTAL_ANGLE, spriteConfig: ENEMY_D1},
-        { x: 200 + GAP_1X * 3, y: 300, angle: VERTICAL_ANGLE},
-        { x: 200 + GAP_1X * 4, y: 300, angle: HORIZONTAL_ANGLE, spriteConfig: ENEMY_D1},
-        { x: 200 + GAP_1X * 5, y: 300, angle: VERTICAL_ANGLE},
-        { x: 200 + GAP_1X * 6, y: 300, angle: HORIZONTAL_ANGLE, spriteConfig: ENEMY_D1},
+        { x: 200,             y: 300, angle: Math.PI,             spriteConfig: ENEMY_SHIP5 },
+        { x: 200 + GAP_1X,   y: 300, angle: Math.PI / 2,      spriteConfig: ENEMY_SHIP4 },
+        { x: 200 + GAP_1X*2, y: 300, angle: 3 * Math.PI / 2,     spriteConfig: ENEMY_D1 },
+        { x: 200 + GAP_1X*3, y: 300, angle: 3 * Math.PI / 2,      spriteConfig: ENEMY_SHIP2 },
+        { x: 200 + GAP_1X*4, y: 300, angle: 3 * Math.PI / 2,      spriteConfig: ENEMY_D1 },
+        { x: 200 + GAP_1X*5, y: 300, angle: VERTICAL_ANGLE,      spriteConfig: ENEMY_SHIP5 },
+        { x: 200 + GAP_1X*6, y: 300, angle: 3 * Math.PI / 2,     spriteConfig: ENEMY_SHIP3 },
 
         // bottom row
-        { x: 200, y: 450, angle: VERTICAL_ANGLE},
-        { x: 200 + GAP_1X, y: 450, angle: VERTICAL_ANGLE},
-        { x: 200 + GAP_1X * 2, y: 450, angle: HORIZONTAL_ANGLE, spriteConfig: ENEMY_D1},
-        { x: 200 + GAP_1X * 3, y: 450, angle: VERTICAL_ANGLE},
-        { x: 200 + GAP_1X * 4, y: 450, angle: VERTICAL_ANGLE},
-        { x: 200 + GAP_1X * 6, y: 450, angle: VERTICAL_ANGLE}
+        { x: 200,             y: 450, angle: 3 * Math.PI / 2,      spriteConfig: ENEMY_SHIP3 },
+        { x: 200 + GAP_1X,   y: 450, angle: Math.PI / 2,         spriteConfig: ENEMY_SHIP4 },
+        { x: 200 + GAP_1X*2, y: 450, angle: 3 * Math.PI / 2,      spriteConfig: ENEMY_D1 },
+        { x: 200 + GAP_1X*3, y: 450, angle: Math.PI,             spriteConfig: ENEMY_SHIP5 },
+        { x: 200 + GAP_1X*4, y: 450, angle: 3 * Math.PI / 2,      spriteConfig: ENEMY_SHIP2 },
+        { x: 200 + GAP_1X*6, y: 450, angle: 3 * Math.PI / 2,     spriteConfig: ENEMY_D1 }
 
     ],
     walls: [

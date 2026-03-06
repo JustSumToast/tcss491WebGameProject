@@ -2,10 +2,9 @@ LEVELS.level8 = {
     playerStart: { x: 80, y: 700 },
 
     enemies: [
-        { x: 100, y: 100,},
-        { x: 970, y: 100, angle: 90},
-        { x: 100, y: 300,}
-
+        { x: 100, y: 100,            spriteConfig: ENEMY_SHIP3 },
+        { x: 970, y: 100, angle: 90, spriteConfig: ENEMY_SHIP5 },
+        { x: 100, y: 300,            spriteConfig: ENEMY_SHIP2 }
 
     ],
 

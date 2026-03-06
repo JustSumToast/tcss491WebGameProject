@@ -26,15 +26,15 @@ const LEVEL_MARS = {
     playerStart: { x: 128, y: 128 },
 
     onLoad: function(game) {
-        game.addEntity(new FlyingEnemy(game, 550, 420, 800, 130, 200));
+        game.addEntity(new FlyingEnemy(game, 550, 420, 800, 130, 200, ENEMY_SHIP5));
 
-        game.addEntity(new FlyingEnemy(game, 85, 398, 427, 640, 120))
+        game.addEntity(new FlyingEnemy(game, 85, 398, 427, 640, 120, ENEMY_SHIP5));
     }
 };
 
 class FlyingEnemy extends EnemyShip {
-    constructor(game, startX, startY, endX, endY, speed) {
-        super(game, startX, startY, 0);
+    constructor(game, startX, startY, endX, endY, speed, spriteConfig = null) {
+        super(game, startX, startY, 0, spriteConfig);
         this.startX = startX;
         this.startY = startY;
         this.endX = endX;
