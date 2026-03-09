@@ -302,26 +302,10 @@ class PlayerShip extends Entity {
                 this.y = this.prevY;
                 this.updateBoundingCircle();
 
-                const dx = this.x - entity.x;
-                const dy = this.y - entity.y;
+                const mag = Math.sqrt(this.vx * this.vx + this.vy * this.vy) || 1;
 
-                const mag = Math.sqrt(dx * dx + dy * dy) || 1;
-
-                const push = 6;
-
-                // push player out of collision
-                this.x += (dx / mag) * push;
-                this.y += (dy / mag) * push;
-
-                this.updateBoundingCircle();
-
-                // stop movement
-                this.vx = 0;
-                this.vy = 0;
-
-                // knockback
-                this.knockbackX = (dx / mag) * 300;
-                this.knockbackY = (dy / mag) * 300;
+                this.knockbackX = -(this.vx / mag) * 250;
+                this.knockbackY = -(this.vy / mag) * 250;
 
 
                 if (!this.invulnerable) {
